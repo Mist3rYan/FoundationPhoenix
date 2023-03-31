@@ -1,0 +1,20 @@
+{
+    "name": "misteryan/foundation-phoenix",
+    "description": "Projet Studi. L\u0000objectif est de cr\u0000er un site internet permettant la gestion des donn\u0000es d'une agence d'espionnage.",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Misteryan\\FoundationPhoenix\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yannick",
+            "email": "lanfyp@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "fakerphp/faker": "^1.21"
+    }
+}
