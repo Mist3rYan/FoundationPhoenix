@@ -23,7 +23,17 @@ $_SESSION['message_type'] = "info"; //définit le type de message (success, info
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <div class="container">
-
+  <?php
+  include_once 'fonctions/connect_bdd.php';
+  //liste des agents
+    foreach ($pdo->query('SELECT * FROM Agents') as $row) {
+      echo '<div class="row">';
+      echo '<div class="col-12">';
+      echo '<h2>' . $row['name'] . ' ' . $row['fiorstname'] . '</h2>';
+      echo '</div>';
+      echo '</div>';
+    }
+  ?>
   </div>
   <!-- bootstrap js-->
   <script src="/assets/js/bootstrap.bundle.min.js"></script>
