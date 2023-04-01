@@ -2,7 +2,7 @@
   <nav class="px-4 navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.php"
-        ><img src="/assets/images/logo.svg" width="50" height="50" alt="logo"
+        ><img src="assets/images/logo.svg" width="50" height="50" alt="logo"
       /></a>
       <button
         class="navbar-toggler"
