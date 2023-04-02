@@ -1,5 +1,6 @@
 <?php
 session_start(); //démarre la session
+require_once ('fonctions/variablesConnexion.php'); 
 ?>
 
 <!DOCTYPE html>
@@ -32,10 +33,11 @@ session_start(); //démarre la session
         était déjà en activité durant les années 1940. L'objectif a toujours été le même :
         protéger les intérêts du pays. </p>
     </div>
-    <div class="mt-4 text-center">
+  </div>
+  <div class="container mt-4 text-center">
+    <span class="h4">BOUTONS POUR DEMONSTRATION</span>
+    <div class="mt-4 ">
       <a href="fonctions/fixtures.php" class="btn btn-warning">Ajoutez Fixtures</a>
-    </div>
-    <div class="mt-4 text-center">
       <a href="fonctions/deleteFixtures.php" class="btn btn-danger">Supprimer BDD</a>
     </div>
   </div>

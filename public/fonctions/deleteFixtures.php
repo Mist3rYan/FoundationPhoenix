@@ -9,7 +9,7 @@ try {
     $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
 } catch (PDOException $e) {
     $_SESSION['message'] = "Erreur : " . $e->getMessage(); //stocke le message dans une variable de session
-    $_SESSION['message_type'] = "danger"; //définit le type de message (success, info, warning, danger)
+    $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
 }
 
 header('Location: ../index.php');

@@ -1,10 +1,8 @@
 <?php
-
-
-$servername = 'localhost';
-$username = 'root';
+$servername = $_SESSION['DBHOST'];
+$username = $_SESSION['DBUSER'];
 $password = '';
-$dbname = 'phoenix_foundation';
+$dbname = $_SESSION['DBNAME'];
 try {
     $dbco = new PDO("mysql:host=$servername", $username, $password);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -81,6 +79,11 @@ try {
                     Now()
                 )";
         $dbco->exec($sql);
+    } else {
+        $_SESSION['message'] = "Les fixtures ont déja été ajoutées"; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
+        header('Location: ../index.php');
+        exit();
     }
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();

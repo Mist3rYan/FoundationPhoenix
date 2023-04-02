@@ -1,8 +1,8 @@
 <?php
-define("DBHOST", "localhost");
-define("DBUSER", "root");
+define("DBHOST", $_SESSION['DBHOST']);
+define("DBUSER", $_SESSION['DBUSER']);
 define("DBPASSWORD", "");
-define("DBNAME", "phoenix_foundation");
+define("DBNAME", $_SESSION['DBNAME']);
 
 // ON DEFINIT LE DSN
 $dsn = "mysql:host=" . DBHOST . ";dbname=" . DBNAME;
