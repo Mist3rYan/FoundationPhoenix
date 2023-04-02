@@ -26,3 +26,6 @@ if (isset($message_type)) {//vérifie si le type de message existe
     }
     echo '<div class="alert ' . $alert . '" role="alert">' . $message . '</div>';
 }
+
+/* $_SESSION['message'] = "Erreur : " . $e->getMessage(); //stocke le message dans une variable de session
+$_SESSION['message_type'] = "danger"; //définit le type de message (success, info, warning, danger) */

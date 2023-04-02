@@ -1,7 +1,5 @@
 <?php
 session_start(); //démarre la session
-$_SESSION['message'] = "Votre message a bien été envoyé."; //stocke le message dans une variable de session
-$_SESSION['message_type'] = "info"; //définit le type de message (success, info, warning, danger)
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +21,7 @@ $_SESSION['message_type'] = "info"; //définit le type de message (success, info
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <div class="container d-flex flex-column justify-content-center">
-    <div class="text-center">
+    <div class="text-center mt-5">
       <img src="assets/images/logo.svg" alt="logo phoenix foundation" width="20%" height="20%">
     </div>
     <div class="mt-4">
@@ -36,6 +34,9 @@ $_SESSION['message_type'] = "info"; //définit le type de message (success, info
     </div>
     <div class="mt-4 text-center">
       <a href="fonctions/fixtures.php" class="btn btn-warning">Ajoutez Fixtures</a>
+    </div>
+    <div class="mt-4 text-center">
+      <a href="fonctions/deleteFixtures.php" class="btn btn-danger">Supprimer BDD</a>
     </div>
   </div>
   <!-- bootstrap js-->

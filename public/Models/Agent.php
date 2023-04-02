@@ -1,5 +1,5 @@
 <?php
-require_once('../Entity/User.php'); //charge les fonctions liées aux agents
+require_once('../Models/User.php'); //charge les fonctions liées aux agents
 
 class Agent extends User
 {

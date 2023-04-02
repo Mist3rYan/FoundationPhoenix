@@ -1,7 +1,8 @@
 <?php
-require_once('../fonctions/connect.php'); //charge la connexion à la base de données
+session_start(); //démarre la session
+require_once('../fonctions/installDatabase.php'); //charge la connexion à la base de données
 require_once('../../vendor/autoload.php'); //charge les dépendances
-require_once('../Entity/agent.php'); //charge les fonctions liées aux agents
+require_once('../Models/agent.php'); //charge les fonctions liées aux agents
 
 // On crée une instance de Faker en FR
 $faker = Faker\Factory::create('fr_FR');
@@ -59,7 +60,7 @@ for ($i = 0; $i < $nbAgents; $i++) {
     $agent->setFirstname($faker->firstname());
 
     // On choisit un pays aléatoire
-    $nbr = rand(1, count($country)-1);
+    $nbr = rand(1, count($country) - 1);
     $agent->setNationality($country[$nbr]);
 
     // On choisit une date aléatoire entre 18 et 60 ans
@@ -76,7 +77,7 @@ for ($i = 0; $i < $nbAgents; $i++) {
     $agent->setSpeciality($listeSpecialities);
 
     // On insère les données dans la base de données
-    $req = $con->prepare("INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) VALUES (?,?,?,?,?,?)");
+    $req = $dbco->prepare("INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) VALUES (?,?,?,?,?,?)");
     $req->execute(array(
         $agent->getCode(),
         $agent->getName(),
@@ -96,7 +97,7 @@ for ($i = 0; $i < $nbContact; $i++) {
     $contact->setFirstname($faker->firstname());
 
     // On choisit un pays aléatoire
-    $nbr = rand(1, count($country)-1);
+    $nbr = rand(1, count($country) - 1);
     $contact->setNationality($country[$nbr]);
 
     // On choisit une date aléatoire entre 18 et 60 ans
@@ -104,7 +105,7 @@ for ($i = 0; $i < $nbContact; $i++) {
     $contact->setBirthdate($date->format('Y-m-d'));
 
     // On insère les données dans la base de données
-    $req = $con->prepare("INSERT INTO contacts (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
+    $req = $dbco->prepare("INSERT INTO contacts (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
     $req->execute(array(
         $contact->getCode(),
         $contact->getName(),
@@ -122,7 +123,7 @@ for ($i = 0; $i < $nbTarget; $i++) {
     $target->setName($faker->name());
     $target->setFirstname($faker->firstname());
     // On choisit un pays aléatoire
-    $nbr = rand(1, count($country)-1);
+    $nbr = rand(1, count($country) - 1);
     $target->setNationality($country[$nbr]);
 
     // On choisit une date aléatoire entre 18 et 60 ans
@@ -130,7 +131,7 @@ for ($i = 0; $i < $nbTarget; $i++) {
     $target->setBirthdate($date->format('Y-m-d'));
 
     // On insère les données dans la base de données
-    $req = $con->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
+    $req = $dbco->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
     $req->execute(array(
         $target->getCode(),
         $target->getName(),
@@ -139,3 +140,9 @@ for ($i = 0; $i < $nbTarget; $i++) {
         date($target->getBirthdate())
     ));
 }
+
+$_SESSION['message'] = "Les données ont bien été ajoutées !"; //stocke le message dans une variable de session
+$_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
+
+header('Location: ../index.php');
+exit();
