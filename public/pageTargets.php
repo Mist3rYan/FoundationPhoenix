@@ -21,6 +21,25 @@ require_once('fonctions/connect.php');
 <body>
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
+  <?php
+  // On récupère le nombre d'agents par page
+  $entityByPage = 3;
+  // On récupère le nombre total d'agents
+  $entityTotalReq = $con->query('SELECT id FROM targets');
+  // On calcule le nombre de pages total
+  $entityTotal = $entityTotalReq->rowCount();
+  // On arrondit au nombre supérieur le nombre de pages
+  $pageTotal = ceil($entityTotal / $entityByPage);
+
+  if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0) {
+    $_GET['page'] = intval($_GET['page']);
+    $currentPage = $_GET['page'];
+  } else {
+    $currentPage = 1;
+  }
+  // On calcule le numéro du premier agent de la page
+  $start = ($currentPage - 1) * $entityByPage;
+  ?>
   <div class="container">
   <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
       <strong>TARGETS</strong>
@@ -28,7 +47,7 @@ require_once('fonctions/connect.php');
     <div class="card-deck">
       <?php
       // On récupère les targets
-      $targets = $con->query('SELECT * FROM targets');
+      $targets = $con->query('SELECT * FROM targets ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
       // On affiche chaque entrée une à une
       while ($target = $targets->fetch()) {
         $date = new DateTime($target['birthdate']);
@@ -50,7 +69,44 @@ require_once('fonctions/connect.php');
       ?>
     </div>
   </div>
-
+  <!-- Pagination -->
+  <nav class="m-4">
+    <ul class="pagination pagination-lg justify-content-center">
+      <li class="page-item">
+        <?php
+        if ($currentPage == 1) { ?>
+          <a class="page-link disabled" href="<?php echo 'pageTargets.php?page=' . $currentPage ?>">Précédent</a>
+        <?php
+        } else { ?>
+          <a class="page-link" href="<?php echo 'pageTargets.php?page=' . $currentPage - 1 ?>">Précédent</a>
+        <?php
+        } ?>
+      </li>
+      <?php
+      for ($i = 1; $i <= $pageTotal; $i++) {
+        if ($i != $currentPage) { ?>
+          <li class="page-item"><a class="page-link" href="<?php echo 'pageTargets.php?page=' . $i ?>"><?php echo $i ?></a> </li>
+        <?php
+        } else { ?>
+          <li class="page-item active">
+            <a class="page-link" href="<?php echo 'pageTargets.php?page=' . $i ?>"><?php echo $i ?></a>
+          </li>
+      <?php
+        }
+      }
+      ?>
+      <li class="page-item">
+        <?php
+        if ($currentPage == $pageTotal) { ?>
+          <a class="page-link disabled" href="<?php echo 'pageTargets.php?page=' . $currentPage ?>">Suivant</a>
+        <?php
+        } else { ?>
+          <a class="page-link" href="<?php echo 'pageTargets.php?page=' . $currentPage + 1 ?>">Suivant</a>
+        <?php
+        } ?>
+      </li>
+    </ul>
+  </nav>
   <!-- bootstrap js-->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <!-- js -->
