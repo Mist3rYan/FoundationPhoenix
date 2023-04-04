@@ -1,0 +1,140 @@
+<?php
+session_start(); //démarre la session
+require_once('fonctions/connect.php');
+// Spécialités
+$stack = [];
+$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+while ($specialitie = $specialities->fetch()) {
+  array_push($stack, $specialitie['name']);
+}
+$specialities->closeCursor(); // Termine le traitement de la requête
+if (isset($_POST['create'])) {
+  $domaine = [];
+  $specialite = '';
+  $name = $_POST['name'];
+  $firstname = $_POST['firstname'];
+  $code = $_POST['code'];
+  if (($_POST['pays']) !== 'Pays...') {
+    $pays = $_POST['pays'];
+  } else {
+    $pays = '';
+  }
+  if (isset($_POST['domaine'])) {
+    foreach ($_POST['domaine'] as $valeur) {
+      array_push($domaine, $valeur);
+    }
+    $specialite = implode(',', $domaine);
+  }
+
+  $date = $_POST['date'];
+  echo $name . $firstname . $code . $pays . $specialite . $date;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Foundation Phoenix - Agents</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+  <?php include '_partials/_header.php'; ?>
+  <?php include '_partials/_messages.php'; ?>
+  <?php
+
+
+  $country = array(
+    'France',
+    'Russie',
+    'Angleterre',
+    'Chine',
+    'Etats-Unis',
+    'Japon',
+    'Allemagne',
+    'Italie',
+    'Espagne',
+    'Portugal',
+    'Pologne',
+    'Belgique',
+    'Suisse',
+    'Canada',
+    'Mexique',
+    'Brésil',
+    'Argentine',
+    'Australie',
+    'Nouvelle-Zélande',
+    'Afrique du Sud',
+    'Inde',
+    'Indonésie',
+    'Chili',
+    'Colombie',
+    'Perou',
+    'Equateur'
+  );
+  ?>
+  <div class="container">
+    <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
+      <strong>CREATION AGENT</strong>
+    </div>
+    <form action="pageAgentNew.php" method="post">
+      <div class="row mt-4">
+        <div class="col">
+          <input type="text" class="form-control" name="name" placeholder="Nom">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" name="firstname" placeholder="Prénom">
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col">
+          <input type="text" class="form-control" name="code" placeholder="Code">
+        </div>
+        <div class="col">
+          <select id="pays" name="pays" class="form-control">
+            <option selected>Pays...</option>
+            <?php foreach ($country as $value) { ?>
+              <option value="<?php echo $value ?>"><?php echo $value ?></option>
+            <?php } ?>
+          </select>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <?php
+          foreach ($stack as $value) {
+          ?>
+            <div class="form-check checkbox-lg form-check-inline">
+              <input class="form-check-input" type="checkbox" id="specialitie<?php echo $value ?>" name="domaine[]" value="<?php echo $value ?>">
+              <label class="form-check-label h5" for="specialitie<?php echo $value ?>"><?php echo $value ?></label>
+            </div>
+          <?php
+          }
+          ?>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col">
+          <input type="date" class="form-control" name="date" placeholder="Date de naissance">
+        </div>
+      </div>
+      <div class="row mt-4">
+        <button type="submit" class="btn btn-primary btn-lg btn-block" name="create">Créer</button>
+      </div>
+    </form>
+  </div>
+  <!-- bootstrap js-->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <!-- js -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

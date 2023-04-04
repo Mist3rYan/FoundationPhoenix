@@ -28,7 +28,7 @@
                 Agents
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">New</a></li>
+                <li><a class="dropdown-item" href="./pageAgentNew.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageAgents.php">Get</a></li>
                 <li><a class="dropdown-item" href="#">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
