@@ -62,18 +62,18 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
-                <li><a class="dropdown-item" href="#">Get</a></li>
+                <li><a class="dropdown-item" href="./pageHideouts.php">Get</a></li>
                 <li><a class="dropdown-item" href="#">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link " href="pageSpecialties.php">
-                Specialties
+            <a class="nav-link dropdown-toggle" href="pageSpecialities.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Specialities
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
-                <li><a class="dropdown-item" href="#">Get</a></li>
+                <li><a class="dropdown-item" href="./pageSpecialities.php">Get</a></li>
                 <li><a class="dropdown-item" href="#">Delete</a></li>
               </ul>
             </li>

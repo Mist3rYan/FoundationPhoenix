@@ -22,7 +22,9 @@ require_once('fonctions/connect.php');
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <div class="container">
-  <div class="h2 text-center mt-4"> Contacts </div>
+  <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
+      <strong>CONTACTS</strong>
+    </div>
     <div class="card-deck">
       <?php
       // On récupère les agents
@@ -44,7 +46,7 @@ require_once('fonctions/connect.php');
         </div>
       <?php
       }
-      $agents->closeCursor(); // Termine le traitement de la requête
+      $contacts->closeCursor(); // Termine le traitement de la requête
       ?>
     </div>
   </div>

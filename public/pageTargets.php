@@ -22,7 +22,9 @@ require_once('fonctions/connect.php');
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <div class="container">
-  <div class="h2 text-center mt-4"> Targets </div>
+  <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
+      <strong>TARGETS</strong>
+    </div>
     <div class="card-deck">
       <?php
       // On récupère les targets
