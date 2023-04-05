@@ -1,6 +1,6 @@
 <?php
 session_start(); //démarre la session
-require_once('fonctions/connect.php');
+require_once('fonctions/connect.php'); //charge la connexion à la base de données
 // Spécialités
 $stack = [];
 $specialities = $con->query('SELECT * FROM specialities ORDER BY id');
@@ -14,20 +14,45 @@ if (isset($_POST['create'])) {
   $name = $_POST['name'];
   $firstname = $_POST['firstname'];
   $code = $_POST['code'];
+  $date = $_POST['date'];
+
   if (($_POST['pays']) !== 'Pays...') {
     $pays = $_POST['pays'];
   } else {
     $pays = '';
+    $_SESSION['message'] = " Merci de sélectionner un pays ! "; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   }
   if (isset($_POST['domaine'])) {
     foreach ($_POST['domaine'] as $valeur) {
       array_push($domaine, $valeur);
     }
     $specialite = implode(',', $domaine);
+  } else {
+    $_SESSION['message'] = $_SESSION['message'] . " Merci de renseigner une spécialité au minimum !"; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   }
-
-  $date = $_POST['date'];
-  echo $name . $firstname . $code . $pays . $specialite . $date;
+  // Vérifie si le nom d'utilisateur existe déjà
+  $stmt = $con->prepare("SELECT * FROM agents WHERE code=?");
+  $stmt->execute([$code]);
+  $codeSearch = $stmt->fetch();
+  if ($codeSearch) {
+    $_SESSION['message'] = " Le code agent existe déjà !"; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+  } else {
+    // le nom d'utilisateur n'existe pas
+    $stmt = $con->prepare("INSERT INTO agents (code, name, firstname, nationality, speciality, birthdate) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$code, $name, $firstname, $pays, $specialite, $date]);
+    if ($stmt) {
+      $_SESSION['message'] = " Agent créé avec succès !"; //stocke le message dans une variable de session
+      $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
+      header('Location: pageAgents.php');
+      exit();
+    } else {
+      $_SESSION['message'] = " Erreur lors de la création de l'agent !"; //stocke le message dans une variable de session
+      $_SESSION['message_type'] = "danger"; //définit le type de message (success, info, warning, danger)
+    }
+  }
 }
 ?>
 
@@ -50,8 +75,6 @@ if (isset($_POST['create'])) {
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <?php
-
-
   $country = array(
     'France',
     'Russie',
@@ -88,15 +111,15 @@ if (isset($_POST['create'])) {
     <form action="pageAgentNew.php" method="post">
       <div class="row mt-4">
         <div class="col">
-          <input type="text" class="form-control" name="name" placeholder="Nom">
+          <input type="text" class="form-control" name="name" placeholder="Nom" required>
         </div>
         <div class="col">
-          <input type="text" class="form-control" name="firstname" placeholder="Prénom">
+          <input type="text" class="form-control" name="firstname" placeholder="Prénom" required>
         </div>
       </div>
       <div class="row mt-4">
         <div class="col">
-          <input type="text" class="form-control" name="code" placeholder="Code">
+          <input type="text" class="form-control" name="code" placeholder="Code" required>
         </div>
         <div class="col">
           <select id="pays" name="pays" class="form-control">
@@ -123,7 +146,7 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4">
         <div class="col">
-          <input type="date" class="form-control" name="date" placeholder="Date de naissance">
+          <input type="date" class="form-control" name="date" placeholder="Date de naissance" required>
         </div>
       </div>
       <div class="row mt-4">
