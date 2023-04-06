@@ -1,7 +1,7 @@
 <?php
 define("DBHOST", $_SESSION['DBHOST']);
 define("DBUSER", $_SESSION['DBUSER']);
-define("DBPASSWORD", "");
+define("DBPASSWORD", $_SESSION['PASSWORD']);
 define("DBNAME", $_SESSION['DBNAME']);
 
 // ON DEFINIT LE DSN

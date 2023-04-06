@@ -108,7 +108,7 @@ if (isset($_POST['create'])) {
     <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
       <strong>CREATION AGENT</strong>
     </div>
-    <form action="pageAgentNew.php" method="post">
+    <form action="pageAgentCreate.php" method="post">
       <div class="row mt-4">
         <div class="col">
           <input type="text" class="form-control" name="name" placeholder="Nom" required>

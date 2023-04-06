@@ -1,7 +1,7 @@
 <?php
 $servername = $_SESSION['DBHOST'];
 $username = $_SESSION['DBUSER'];
-$password = '';
+$password = $_SESSION['PASSWORD'];
 $dbname = $_SESSION['DBNAME'];
 try {
     $dbco = new PDO("mysql:host=$servername", $username, $password);
