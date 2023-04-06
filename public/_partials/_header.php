@@ -41,7 +41,7 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
                 <li><a class="dropdown-item" href="./pageTargets.php">Get</a></li>
-                <li><a class="dropdown-item" href="#">Delete</a></li>
+                <li><a class="dropdown-item" href="./pageTargetsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
               </ul>
             </li>
@@ -52,7 +52,7 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
                 <li><a class="dropdown-item" href="./pageContacts.php">Get</a></li>
-                <li><a class="dropdown-item" href="#">Delete</a></li>
+                <li><a class="dropdown-item" href="./pageContactsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
               </ul>
             </li>
@@ -63,7 +63,7 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
                 <li><a class="dropdown-item" href="./pageHideouts.php">Get</a></li>
-                <li><a class="dropdown-item" href="#">Delete</a></li>
+                <li><a class="dropdown-item" href="./pageHideoutsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
               </ul>
             </li>
@@ -74,7 +74,7 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">New</a></li>
                 <li><a class="dropdown-item" href="./pageSpecialities.php">Get</a></li>
-                <li><a class="dropdown-item" href="#">Delete</a></li>
+                <li><a class="dropdown-item" href="./pageSpecialitiesDelete.php">Delete</a></li>
               </ul>
             </li>
         </ul>

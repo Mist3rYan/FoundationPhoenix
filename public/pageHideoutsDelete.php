@@ -12,7 +12,7 @@ require_once('fonctions/connect.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-    <title>Foundation Phoenix - Agents</title>
+    <title>Foundation Phoenix - Hideouts</title>
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/reset.css" />
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -25,7 +25,7 @@ require_once('fonctions/connect.php');
     // On récupère le nombre d'agents par page
     $entityByPage = 3;
     // On récupère le nombre total d'agents
-    $entityTotalReq = $con->query('SELECT id FROM agents');
+    $entityTotalReq = $con->query('SELECT id FROM hideouts');
     // On calcule le nombre de pages total
     $entityTotal = $entityTotalReq->rowCount();
     // On arrondit au nombre supérieur le nombre de pages
@@ -42,36 +42,30 @@ require_once('fonctions/connect.php');
     ?>
     <div class="container">
         <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
-            <strong>SUPPRESSION AGENTS</strong>
+            <strong>SUPPRESSION HIDEOUTS</strong>
         </div>
         <div class="card-deck">
             <?php
             // On récupère les agents
-            $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+            $hideouts = $con->query('SELECT * FROM hideouts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
             // On affiche chaque entrée une à une
-            while ($agent = $agents->fetch()) {
-                $array = $agent['speciality'];
-                $deleteCharac = array("[", "]", '"');
-                $array = str_replace($deleteCharac, "", $array);
-                $date = new DateTime($agent['birthdate']);
+            while ($hideout = $hideouts->fetch()) {
             ?>
                 <div class="card mt-4">
                     <div class="card-header bg-dark">
-                        <h5 class="card-title"><span class="h4 text-warning"><?php echo $agent['name']; ?></span></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $agent['firstname']; ?></span></h6>
+                        <h5 class="card-title"><span class="h4 text-warning"><?php echo $hideout['type']; ?></span></h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><span class=" h5 text-white text-decoration-underline">Code :</span><span class="h5 text-white"> <?php echo $hideout['code']; ?></span></h6>
                     </div>
                     <div class="card-body">
-                        <p class="card-text"><span class=" text-decoration-underline">Code agent :</span><span> <?php echo $agent['code']; ?></span></p>
-                        <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $agent['nationality']; ?></span></p>
-                        <p class="card-text"><span class="text-decoration-underline">Spécialités :</span><span> <?php echo $array ?></span></p>
-                        <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
+                        <p class="card-text"><span class=" text-decoration-underline">Adresse :</span><span> <?php echo $hideout['address']; ?></span></p>
+                        <p class="card-text"><span class="text-decoration-underline">Pays :</span><span> <?php echo $hideout['country']; ?></span></p>
                     </div>
                     <div class="card-footer mt-4">
-                        <a class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#modal<?= $agent['id'] ?>">Supprimer</a>
+                        <a class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#modal<?= $hideout['id'] ?>">Supprimer</a>
                     </div>
                 </div>
                 <!-- Modal -->
-                <div class="modal fade" id="modal<?= $agent['id'] ?>" role="dialog">
+                <div class="modal fade" id="modal<?= $hideout['id'] ?>" role="dialog">
                     <div class="modal-dialog">
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -85,7 +79,7 @@ require_once('fonctions/connect.php');
                                 <p>Confirmez vous la suppression ?</p>
                             </div>
                             <div class='modal-footer'>
-                                <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $agent['id'] ?>&table=agents"> Oui </a>
+                                <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $hideout['id'] ?>&table=hideouts"> Oui </a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
 
@@ -94,7 +88,7 @@ require_once('fonctions/connect.php');
                 </div>
             <?php
             }
-            $agents->closeCursor(); // Termine le traitement de la requête
+            $hideouts->closeCursor(); // Termine le traitement de la requête
             ?>
         </div>
     </div>
@@ -104,21 +98,21 @@ require_once('fonctions/connect.php');
             <li class="page-item">
                 <?php
                 if ($currentPage == 1) { ?>
-                    <a class="page-link disabled" href="<?php echo 'pageAgentsDelete.php?page=' . $currentPage ?>">Précédent</a>
+                    <a class="page-link disabled" href="<?php echo 'pageHideoutsDelete.php?page=' . $currentPage ?>">Précédent</a>
                 <?php
                 } else { ?>
-                    <a class="page-link" href="<?php echo 'pageAgentsDelete.php?page=' . $currentPage - 1 ?>">Précédent</a>
+                    <a class="page-link" href="<?php echo 'pageHideoutsDelete.php?page=' . $currentPage - 1 ?>">Précédent</a>
                 <?php
                 } ?>
             </li>
             <?php
             for ($i = 1; $i <= $pageTotal; $i++) {
                 if ($i != $currentPage) { ?>
-                    <li class="page-item"><a class="page-link" href="<?php echo 'pageAgentsDelete.php?page=' . $i ?>"><?php echo $i ?></a> </li>
+                    <li class="page-item"><a class="page-link" href="<?php echo 'pageHideoutsDelete.php?page=' . $i ?>"><?php echo $i ?></a> </li>
                 <?php
                 } else { ?>
                     <li class="page-item active">
-                        <a class="page-link" href="<?php echo 'pageAgentsDelete.php?page=' . $i ?>"><?php echo $i ?></a>
+                        <a class="page-link" href="<?php echo 'pageHideoutsDelete.php?page=' . $i ?>"><?php echo $i ?></a>
                     </li>
             <?php
                 }
@@ -127,10 +121,10 @@ require_once('fonctions/connect.php');
             <li class="page-item">
                 <?php
                 if ($currentPage == $pageTotal) { ?>
-                    <a class="page-link disabled" href="<?php echo 'pageAgentsDelete.php?page=' . $currentPage ?>">Suivant</a>
+                    <a class="page-link disabled" href="<?php echo 'pageHideoutsDelete.php?page=' . $currentPage ?>">Suivant</a>
                 <?php
                 } else { ?>
-                    <a class="page-link" href="<?php echo 'pageAgentsDelete.php?page=' . $currentPage + 1 ?>">Suivant</a>
+                    <a class="page-link" href="<?php echo 'pageHideoutsDelete.php?page=' . $currentPage + 1 ?>">Suivant</a>
                 <?php
                 } ?>
             </li>
