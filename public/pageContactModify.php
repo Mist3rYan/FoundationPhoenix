@@ -1,17 +1,8 @@
 <?php
 session_start(); //démarre la session
 require_once('fonctions/connect.php');
-// Spécialités
-$stack = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
-while ($specialitie = $specialities->fetch()) {
-    array_push($stack, $specialitie['name']);
-}
-$specialities->closeCursor(); // Termine le traitement de la requête
 
 if (isset($_POST['create'])) {
-    $domaine = [];
-    $specialite = '';
     $name = $_POST['name'];
     $firstname = $_POST['firstname'];
     $date = $_POST['date'];
@@ -24,31 +15,19 @@ if (isset($_POST['create'])) {
         $pays = '';
         $_SESSION['message'] = " Merci de sélectionner un pays ! "; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
-        header('Location: pageAgentModify.php');
+        header('Location: pageContactModify.php');
         exit();
     }
-    // Verifie si au moins une specialité a été selectionnée
-    if (isset($_POST['domaine'])) {
-        foreach ($_POST['domaine'] as $valeur) {
-            array_push($domaine, $valeur);
-        }
-        $specialite = implode(',', $domaine);
-    } else {
-        $_SESSION['message'] = $_SESSION['message'] . " Merci de renseigner une spécialité au minimum !"; //stocke le message dans une variable de session
-        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
-        header('Location: pageAgentModify.php');
-        exit();
-    }
-    // Update de l'agent
-    $stmt = $con->prepare("UPDATE  agents SET name=?, firstname=?, nationality=?, speciality=?, birthdate=? WHERE id = $idUpdate");
-    $stmt->execute([$name, $firstname, $pays, $specialite, $date]);
+    // Update de contact 
+    $stmt = $con->prepare("UPDATE  contacts SET name=?, firstname=?, nationality=?, birthdate=? WHERE id = $idUpdate");
+    $stmt->execute([$name, $firstname, $pays, $date]);
     if ($stmt) {
-        $_SESSION['message'] = " Agent modifié avec succès !"; //stocke le message dans une variable de session
+        $_SESSION['message'] = " Contact modifié avec succès !"; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
-        header('Location: pageAgentModify.php');
+        header('Location: pageContactModify.php');
         exit();
     } else {
-        $_SESSION['message'] = " Erreur lors de la modification de l'agent !"; //stocke le message dans une variable de session
+        $_SESSION['message'] = " Erreur lors de la modification du contact!"; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "danger"; //définit le type de message (success, info, warning, danger)
     }
 }
@@ -102,7 +81,7 @@ if (isset($_POST['create'])) {
             'Perou',
             'Equateur'
         );
-        $query = "SELECT * FROM agents WHERE id = :id";
+        $query = "SELECT * FROM contacts WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -113,9 +92,9 @@ if (isset($_POST['create'])) {
     ?>
         <div class="container">
             <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
-                <strong>MODIFICATION AGENTS</strong>
+                <strong>MODIFICATION CONTACT</strong>
             </div>
-            <form action="pageAgentModify.php" method="post">
+            <form action="pageContactModify.php" method="post">
                 <div class="row mt-4">
                     <div class="col">
                         <input type="text" class="form-control" name="id" value="<?php echo $user['id'] ?>" hidden>
@@ -144,31 +123,6 @@ if (isset($_POST['create'])) {
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <div class="col-md-12">
-                        <?php
-                        foreach ($stack as $value) {
-                        ?>
-                            <div class="form-check checkbox-lg form-check-inline">
-                                <?php
-                                $array =  $user['speciality'];
-                                if (strpos($array, $value)) {
-                                ?>
-                                    <input class="form-check-input" type="checkbox" id="specialitie<?php echo $value ?>" name="domaine[]" value="<?php echo $value ?>" checked="checked">
-                                <?php
-                                } else {
-                                ?>
-                                    <input class=" form-check-input" type="checkbox" id="specialitie<?php echo $value ?>" name="domaine[]" value="<?php echo $value ?>">
-                                <?php
-                                }
-                                ?>
-                                <label class="form-check-label h5" for="specialitie<?php echo $value ?>"><?php echo $value ?></label>
-                            </div>
-                        <?php
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="row mt-4">
                     <div class="col">
                         <input type="date" class="form-control" name="date" placeholder="Date de naissance" value="<?php echo $user['birthdate'] ?>" required>
                     </div>
@@ -179,10 +133,10 @@ if (isset($_POST['create'])) {
             </form>
         </div><?php
             } else {
-                // On récupère le nombre d'agents par page
+                // On récupère le nombre de contact par page
                 $entityByPage = 3;
-                // On récupère le nombre total d'agents
-                $entityTotalReq = $con->query('SELECT id FROM agents');
+                // On récupère le nombre total de contact
+                $entityTotalReq = $con->query('SELECT id FROM contacts');
                 // On calcule le nombre de pages total
                 $entityTotal = $entityTotalReq->rowCount();
                 // On arrondit au nombre supérieur le nombre de pages
@@ -194,42 +148,38 @@ if (isset($_POST['create'])) {
                 } else {
                     $currentPage = 1;
                 }
-                // On calcule le numéro du premier agent de la page
+                // On calcule le numéro du premier contact de la page
                 $start = ($currentPage - 1) * $entityByPage;
                 ?>
         <div class="container">
             <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
-                <strong>MODIFICATION AGENTS</strong>
+                <strong>MODIFICATION CONTACTS</strong>
             </div>
             <div class="card-deck">
                 <?php
-                // On récupère les agents
-                $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                // On récupère les contacts
+                $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                 // On affiche chaque entrée une à une
-                while ($agent = $agents->fetch()) {
-                    $array = $agent['speciality'];
-                    $deleteCharac = array("[", "]", '"');
-                    $array = str_replace($deleteCharac, "", $array);
-                    $date = new DateTime($agent['birthdate']);
+                while ($contact = $contacts->fetch()) {
+                    $date = new DateTime($contact['birthdate']);
                 ?>
                     <div class="card mt-4">
                         <div class="card-header bg-dark">
-                            <h5 class="card-title"><span class="h4 text-warning"><?php echo $agent['name']; ?></span></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $agent['firstname']; ?></span></h6>
+                            <h5 class="card-title"><span class="h4 text-warning"><?php echo $contact['name']; ?></span></h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $contact['firstname']; ?></span></h6>
                         </div>
                         <div class="card-body">
-                            <p class="card-text"><span class=" text-decoration-underline">Code agent :</span><span> <?php echo $agent['code']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $agent['nationality']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Spécialités :</span><span> <?php echo $array ?></span></p>
+                            <p class="card-text"><span class=" text-decoration-underline">Code contact :</span><span> <?php echo $contact['code']; ?></span></p>
+                            <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $contact['nationality']; ?></span></p>
                             <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
                         </div>
                         <div class="card-footer mt-'">
-                            <a href="pageAgentModify.php?id=<?php echo $agent['id']; ?>" class="btn btn-primary">Modifier</a>
+                            <a href="pageContactModify.php?id=<?php echo $contact['id']; ?>" class="btn btn-primary">Modifier</a>
                         </div>
                     </div>
                 <?php
                 }
-                $agents->closeCursor(); // Termine le traitement de la requête
+                $contacts->closeCursor(); // Termine le traitement de la requête
                 ?>
             </div>
         </div>
@@ -239,21 +189,21 @@ if (isset($_POST['create'])) {
                 <li class="page-item">
                     <?php
                     if ($currentPage == 1) { ?>
-                        <a class="page-link disabled" href="<?php echo 'pageAgentModify.php?page=' . $currentPage ?>">Précédent</a>
+                        <a class="page-link disabled" href="<?php echo 'pageContactModify.php?page=' . $currentPage ?>">Précédent</a>
                     <?php
                     } else { ?>
-                        <a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $currentPage - 1 ?>">Précédent</a>
+                        <a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $currentPage - 1 ?>">Précédent</a>
                     <?php
                     } ?>
                 </li>
                 <?php
                 for ($i = 1; $i <= $pageTotal; $i++) {
                     if ($i != $currentPage) { ?>
-                        <li class="page-item"><a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $i ?>"><?php echo $i ?></a> </li>
+                        <li class="page-item"><a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $i ?>"><?php echo $i ?></a> </li>
                     <?php
                     } else { ?>
                         <li class="page-item active">
-                            <a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $i ?>"><?php echo $i ?></a>
+                            <a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $i ?>"><?php echo $i ?></a>
                         </li>
                 <?php
                     }
@@ -262,10 +212,10 @@ if (isset($_POST['create'])) {
                 <li class="page-item">
                     <?php
                     if ($currentPage == $pageTotal) { ?>
-                        <a class="page-link disabled" href="<?php echo 'pageAgentModify.php?page=' . $currentPage ?>">Suivant</a>
+                        <a class="page-link disabled" href="<?php echo 'pageContactModify.php?page=' . $currentPage ?>">Suivant</a>
                     <?php
                     } else { ?>
-                        <a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $currentPage + 1 ?>">Suivant</a>
+                        <a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $currentPage + 1 ?>">Suivant</a>
                     <?php
                     } ?>
                 </li>

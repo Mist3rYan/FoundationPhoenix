@@ -17,10 +17,10 @@
                 Missions
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="pageMissions.php">New</a></li>
-                <li><a class="dropdown-item" href="#">Get</a></li>
-                <li><a class="dropdown-item" href="#">Delete</a></li>
-                <li><a class="dropdown-item" href="#">Modify</a></li>
+                <li><a class="dropdown-item" href="pageMissionCreate.php">New</a></li>
+                <li><a class="dropdown-item" href="pageMissions.php">Get</a></li>
+                <li><a class="dropdown-item" href="pageMissionsDelete.php">Delete</a></li>
+                <li><a class="dropdown-item" href="pageMissionModify.php">Modify</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -42,7 +42,7 @@
                 <li><a class="dropdown-item" href="./pageTargetCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageTargets.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageTargetsDelete.php">Delete</a></li>
-                <li><a class="dropdown-item" href="#">Modify</a></li>
+                <li><a class="dropdown-item" href="./pageTargetModify.php">Modify</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -53,7 +53,7 @@
                 <li><a class="dropdown-item" href="./pageContactCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageContacts.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageContactsDelete.php">Delete</a></li>
-                <li><a class="dropdown-item" href="#">Modify</a></li>
+                <li><a class="dropdown-item" href="./pageContactModify.php">Modify</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -64,7 +64,7 @@
                 <li><a class="dropdown-item" href="./pageHideoutCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageHideouts.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageHideoutsDelete.php">Delete</a></li>
-                <li><a class="dropdown-item" href="#">Modify</a></li>
+                <li><a class="dropdown-item" href="./pageHideoutModify.php">Modify</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
