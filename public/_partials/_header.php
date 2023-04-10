@@ -39,7 +39,7 @@
                 Targets
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">New</a></li>
+                <li><a class="dropdown-item" href="./pageTargetCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageTargets.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageTargetsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
@@ -50,7 +50,7 @@
                 Contacts
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">New</a></li>
+                <li><a class="dropdown-item" href="./pageContactCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageContacts.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageContactsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
@@ -61,7 +61,7 @@
                 Hideouts
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">New</a></li>
+                <li><a class="dropdown-item" href="./pageHideoutCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageHideouts.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageHideoutsDelete.php">Delete</a></li>
                 <li><a class="dropdown-item" href="#">Modify</a></li>
@@ -72,7 +72,7 @@
                 Specialities
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">New</a></li>
+                <li><a class="dropdown-item" href="./pageSpecialitieCreate.php">New</a></li>
                 <li><a class="dropdown-item" href="./pageSpecialities.php">Get</a></li>
                 <li><a class="dropdown-item" href="./pageSpecialitiesDelete.php">Delete</a></li>
               </ul>
