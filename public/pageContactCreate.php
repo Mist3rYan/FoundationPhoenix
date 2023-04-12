@@ -63,34 +63,34 @@ if (isset($_POST['create'])) {
   <?php include '_partials/_header.php'; ?>
   <?php include '_partials/_messages.php'; ?>
   <?php
-  $country = array(
-    'France',
-    'Russie',
-    'Angleterre',
-    'Chine',
-    'Etats-Unis',
-    'Japon',
-    'Allemagne',
-    'Italie',
-    'Espagne',
-    'Portugal',
-    'Pologne',
-    'Belgique',
-    'Suisse',
-    'Canada',
-    'Mexique',
-    'Brésil',
-    'Argentine',
-    'Australie',
-    'Nouvelle-Zélande',
-    'Afrique du Sud',
-    'Inde',
-    'Indonésie',
-    'Chili',
-    'Colombie',
-    'Perou',
-    'Equateur'
-  );
+$country = array(
+  'Afrique du Sud',
+  'Allemagne',
+  'Angleterre',
+  'Argentine',
+  'Australie',
+  'Belgique',
+  'Brésil',
+  'Canada',
+  'Chili',
+  'Chine',
+  'Colombie',
+  'Equateur',
+  'Espagne',
+  'Etats-Unis',
+  'France',
+  'Inde',
+  'Indonésie',
+  'Italie',
+  'Japon',
+  'Mexique',
+  'Nouvelle-Zélande',
+  'Perou',
+  'Pologne',
+  'Portugal',
+  'Russie',
+  'Suisse'
+);
   ?>
   <div class="container">
     <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
@@ -120,6 +120,7 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4">
         <div class="col">
+          <label for="date_debut" class="form-label">Date de naissance</label>
           <input type="date" class="form-control" name="date" placeholder="Date de naissance" required>
         </div>
       </div>

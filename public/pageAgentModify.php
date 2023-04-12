@@ -75,33 +75,33 @@ if (isset($_POST['create'])) {
     <?php
     if (isset($_GET['id']) and !empty($_GET['id'])) {
         $country = array(
-            'France',
-            'Russie',
-            'Angleterre',
-            'Chine',
-            'Etats-Unis',
-            'Japon',
+            'Afrique du Sud',
             'Allemagne',
-            'Italie',
-            'Espagne',
-            'Portugal',
-            'Pologne',
-            'Belgique',
-            'Suisse',
-            'Canada',
-            'Mexique',
-            'Brésil',
+            'Angleterre',
             'Argentine',
             'Australie',
-            'Nouvelle-Zélande',
-            'Afrique du Sud',
+            'Belgique',
+            'Brésil',
+            'Canada',
+            'Chili',
+            'Chine',
+            'Colombie',
+            'Equateur',
+            'Espagne',
+            'Etats-Unis',
+            'France',
             'Inde',
             'Indonésie',
-            'Chili',
-            'Colombie',
+            'Italie',
+            'Japon',
+            'Mexique',
+            'Nouvelle-Zélande',
             'Perou',
-            'Equateur'
-        );
+            'Pologne',
+            'Portugal',
+            'Russie',
+            'Suisse'
+          );
         $query = "SELECT * FROM agents WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
@@ -170,6 +170,7 @@ if (isset($_POST['create'])) {
                 </div>
                 <div class="row mt-4">
                     <div class="col">
+                        <label for="date_debut" class="form-label">Date de naissance</label>
                         <input type="date" class="form-control" name="date" placeholder="Date de naissance" value="<?php echo $user['birthdate'] ?>" required>
                     </div>
                 </div>

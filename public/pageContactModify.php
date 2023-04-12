@@ -54,33 +54,33 @@ if (isset($_POST['create'])) {
     <?php
     if (isset($_GET['id']) and !empty($_GET['id'])) {
         $country = array(
-            'France',
-            'Russie',
-            'Angleterre',
-            'Chine',
-            'Etats-Unis',
-            'Japon',
+            'Afrique du Sud',
             'Allemagne',
-            'Italie',
-            'Espagne',
-            'Portugal',
-            'Pologne',
-            'Belgique',
-            'Suisse',
-            'Canada',
-            'Mexique',
-            'Brésil',
+            'Angleterre',
             'Argentine',
             'Australie',
-            'Nouvelle-Zélande',
-            'Afrique du Sud',
+            'Belgique',
+            'Brésil',
+            'Canada',
+            'Chili',
+            'Chine',
+            'Colombie',
+            'Equateur',
+            'Espagne',
+            'Etats-Unis',
+            'France',
             'Inde',
             'Indonésie',
-            'Chili',
-            'Colombie',
+            'Italie',
+            'Japon',
+            'Mexique',
+            'Nouvelle-Zélande',
             'Perou',
-            'Equateur'
-        );
+            'Pologne',
+            'Portugal',
+            'Russie',
+            'Suisse'
+          );
         $query = "SELECT * FROM contacts WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
@@ -124,6 +124,7 @@ if (isset($_POST['create'])) {
                 </div>
                 <div class="row mt-4">
                     <div class="col">
+                        <label for="date_debut" class="form-label">Date de naissance</label>
                         <input type="date" class="form-control" name="date" placeholder="Date de naissance" value="<?php echo $user['birthdate'] ?>" required>
                     </div>
                 </div>
@@ -162,33 +163,33 @@ if (isset($_POST['create'])) {
                 </div>
             <?php
                 } else { ?>
-            <div class="card-deck">
-                <?php
-                // On récupère les contacts
-                $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
-                // On affiche chaque entrée une à une
-                while ($contact = $contacts->fetch()) {
-                    $date = new DateTime($contact['birthdate']);
-                ?>
-                    <div class="card mt-4">
-                        <div class="card-header bg-dark">
-                            <h5 class="card-title"><span class="h4 text-warning"><?php echo $contact['name']; ?></span></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $contact['firstname']; ?></span></h6>
+                <div class="card-deck">
+                    <?php
+                    // On récupère les contacts
+                    $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    // On affiche chaque entrée une à une
+                    while ($contact = $contacts->fetch()) {
+                        $date = new DateTime($contact['birthdate']);
+                    ?>
+                        <div class="card mt-4">
+                            <div class="card-header bg-dark">
+                                <h5 class="card-title"><span class="h4 text-warning"><?php echo $contact['name']; ?></span></h5>
+                                <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $contact['firstname']; ?></span></h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><span class=" text-decoration-underline">Code contact :</span><span> <?php echo $contact['code']; ?></span></p>
+                                <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $contact['nationality']; ?></span></p>
+                                <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
+                            </div>
+                            <div class="card-footer mt-'">
+                                <a href="pageContactModify.php?id=<?php echo $contact['id']; ?>" class="btn btn-primary">Modifier</a>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text"><span class=" text-decoration-underline">Code contact :</span><span> <?php echo $contact['code']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $contact['nationality']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
-                        </div>
-                        <div class="card-footer mt-'">
-                            <a href="pageContactModify.php?id=<?php echo $contact['id']; ?>" class="btn btn-primary">Modifier</a>
-                        </div>
-                    </div>
-                <?php
-                }
-                $contacts->closeCursor(); // Termine le traitement de la requête
-                ?>
-            </div>
+                    <?php
+                    }
+                    $contacts->closeCursor(); // Termine le traitement de la requête
+                    ?>
+                </div>
         </div>
         <!-- Pagination -->
         <nav class="m-4">
@@ -204,17 +205,17 @@ if (isset($_POST['create'])) {
                     } ?>
                 </li>
                 <?php
-                for ($i = 1; $i <= $pageTotal; $i++) {
-                    if ($i != $currentPage) { ?>
+                    for ($i = 1; $i <= $pageTotal; $i++) {
+                        if ($i != $currentPage) { ?>
                         <li class="page-item"><a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $i ?>"><?php echo $i ?></a> </li>
                     <?php
-                    } else { ?>
+                        } else { ?>
                         <li class="page-item active">
                             <a class="page-link" href="<?php echo 'pageContactModify.php?page=' . $i ?>"><?php echo $i ?></a>
                         </li>
                 <?php
+                        }
                     }
-                }
                 ?>
                 <li class="page-item">
                     <?php
@@ -228,13 +229,14 @@ if (isset($_POST['create'])) {
                 </li>
             </ul>
         </nav>
-    <?php
-            }}
-    ?>
-    <!-- bootstrap js-->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <!-- js -->
-    <script src="assets/js/main.js"></script>
+<?php
+                }
+            }
+?>
+<!-- bootstrap js-->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- js -->
+<script src="assets/js/main.js"></script>
 </body>
 
 </html>

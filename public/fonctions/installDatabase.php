@@ -71,7 +71,7 @@ try {
             `type_mission` VARCHAR (100) NOT NULL,
             `status` VARCHAR (100) NOT NULL,
             `date_debut` DATE NOT NULL,
-            `date_fin` DATE NOT NULL,
+            `date_fin` DATE,
             `specialitie_id` INTEGER NOT NULL,
             FOREIGN KEY (`specialitie_id`) REFERENCES `Specialities`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";

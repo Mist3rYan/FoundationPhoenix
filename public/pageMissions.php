@@ -1,7 +1,5 @@
 <?php
 session_start(); //démarre la session
-$_SESSION['message'] = "Votre message a bien été envoyé."; //stocke le message dans une variable de session
-$_SESSION['message_type'] = "info"; //définit le type de message (success, info, warning, danger)
 ?>
 
 <!DOCTYPE html>
