@@ -201,37 +201,44 @@ if (isset($_POST['create'])) {
             <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
                 <strong>MODIFICATION AGENTS</strong>
             </div>
-            <div class="card-deck">
-                <?php
-                // On récupère les agents
-                $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
-                // On affiche chaque entrée une à une
-                while ($agent = $agents->fetch()) {
-                    $array = $agent['speciality'];
-                    $deleteCharac = array("[", "]", '"');
-                    $array = str_replace($deleteCharac, "", $array);
-                    $date = new DateTime($agent['birthdate']);
-                ?>
-                    <div class="card mt-4">
-                        <div class="card-header bg-dark">
-                            <h5 class="card-title"><span class="h4 text-warning"><?php echo $agent['name']; ?></span></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $agent['firstname']; ?></span></h6>
+            <?php
+                if ($entityTotal == 0) { ?>
+                <div class="alert alert-dismissible alert-danger">
+                    <strong>Il n'y a aucun agent enregistré.</strong>
+                </div>
+            <?php
+                } else { ?>
+                <div class="card-deck">
+                    <?php
+                    // On récupère les agents
+                    $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    // On affiche chaque entrée une à une
+                    while ($agent = $agents->fetch()) {
+                        $array = $agent['speciality'];
+                        $deleteCharac = array("[", "]", '"');
+                        $array = str_replace($deleteCharac, "", $array);
+                        $date = new DateTime($agent['birthdate']);
+                    ?>
+                        <div class="card mt-4">
+                            <div class="card-header bg-dark">
+                                <h5 class="card-title"><span class="h4 text-warning"><?php echo $agent['name']; ?></span></h5>
+                                <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $agent['firstname']; ?></span></h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><span class=" text-decoration-underline">Code agent :</span><span> <?php echo $agent['code']; ?></span></p>
+                                <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $agent['nationality']; ?></span></p>
+                                <p class="card-text"><span class="text-decoration-underline">Spécialités :</span><span> <?php echo $array ?></span></p>
+                                <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
+                            </div>
+                            <div class="card-footer mt-'">
+                                <a href="pageAgentModify.php?id=<?php echo $agent['id']; ?>" class="btn btn-primary">Modifier</a>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text"><span class=" text-decoration-underline">Code agent :</span><span> <?php echo $agent['code']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $agent['nationality']; ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Spécialités :</span><span> <?php echo $array ?></span></p>
-                            <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
-                        </div>
-                        <div class="card-footer mt-'">
-                            <a href="pageAgentModify.php?id=<?php echo $agent['id']; ?>" class="btn btn-primary">Modifier</a>
-                        </div>
-                    </div>
-                <?php
-                }
-                $agents->closeCursor(); // Termine le traitement de la requête
-                ?>
-            </div>
+                    <?php
+                    }
+                    $agents->closeCursor(); // Termine le traitement de la requête
+                    ?>
+                </div>
         </div>
         <!-- Pagination -->
         <nav class="m-4">
@@ -247,17 +254,17 @@ if (isset($_POST['create'])) {
                     } ?>
                 </li>
                 <?php
-                for ($i = 1; $i <= $pageTotal; $i++) {
-                    if ($i != $currentPage) { ?>
+                    for ($i = 1; $i <= $pageTotal; $i++) {
+                        if ($i != $currentPage) { ?>
                         <li class="page-item"><a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $i ?>"><?php echo $i ?></a> </li>
                     <?php
-                    } else { ?>
+                        } else { ?>
                         <li class="page-item active">
                             <a class="page-link" href="<?php echo 'pageAgentModify.php?page=' . $i ?>"><?php echo $i ?></a>
                         </li>
                 <?php
+                        }
                     }
-                }
                 ?>
                 <li class="page-item">
                     <?php
@@ -271,13 +278,14 @@ if (isset($_POST['create'])) {
                 </li>
             </ul>
         </nav>
-    <?php
+<?php
+                }
             }
-    ?>
-    <!-- bootstrap js-->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <!-- js -->
-    <script src="assets/js/main.js"></script>
+?>
+<!-- bootstrap js-->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- js -->
+<script src="assets/js/main.js"></script>
 </body>
 
 </html>

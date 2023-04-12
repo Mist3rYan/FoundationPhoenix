@@ -44,6 +44,13 @@ require_once('fonctions/connect.php');
   <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
       <strong>CONTACTS</strong>
     </div>
+    <?php
+    if ($entityTotal == 0) { ?>
+      <div class="alert alert-dismissible alert-danger">
+        <strong>Il n'y a aucun contact enregistré.</strong>
+      </div>
+    <?php
+    } else { ?>
     <div class="card-deck">
       <?php
       // On récupère les agents
@@ -107,6 +114,9 @@ require_once('fonctions/connect.php');
       </li>
     </ul>
   </nav>
+  <?php
+    }
+?>
   <!-- bootstrap js-->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <!-- js -->

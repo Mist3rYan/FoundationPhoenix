@@ -44,55 +44,62 @@ require_once('fonctions/connect.php');
         <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
             <strong>SUPPRESSION CONTACTS</strong>
         </div>
-        <div class="card-deck">
-            <?php
-            // On récupère les agents
-            $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
-            // On affiche chaque entrée une à une
-            while ($contact = $contacts->fetch()) {
-                $date = new DateTime($contact['birthdate']);
-            ?>
-                <div class="card mt-4">
-                    <div class="card-header bg-dark">
-                        <h5 class="card-title"><span class="h4 text-warning"><?php echo $contact['name']; ?></span></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $contact['firstname']; ?></span></h6>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"><span class=" text-decoration-underline">Code contact :</span><span> <?php echo $contact['code']; ?></span></p>
-                        <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $contact['nationality']; ?></span></p>
-                        <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
-                    </div>
-                    <div class="card-footer mt-4">
-                        <a class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#modal<?= $contact['id'] ?>">Supprimer</a>
-                    </div>
-                </div>
-                <!-- Modal -->
-                <div class="modal fade" id="modal<?= $contact['id'] ?>" role="dialog">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 class="modal-title">Supprimer</h3>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Confirmez vous la suppression ?</p>
-                            </div>
-                            <div class='modal-footer'>
-                                <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $contact['id'] ?>&table=contacts"> Oui </a>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-
+        <?php
+        if ($entityTotal == 0) { ?>
+            <div class="alert alert-dismissible alert-danger">
+                <strong>Il n'y a aucun contact enregistré.</strong>
+            </div>
+        <?php
+        } else { ?>
+            <div class="card-deck">
+                <?php
+                // On récupère les agents
+                $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                // On affiche chaque entrée une à une
+                while ($contact = $contacts->fetch()) {
+                    $date = new DateTime($contact['birthdate']);
+                ?>
+                    <div class="card mt-4">
+                        <div class="card-header bg-dark">
+                            <h5 class="card-title"><span class="h4 text-warning"><?php echo $contact['name']; ?></span></h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><span class="h5 text-white"><?php echo $contact['firstname']; ?></span></h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><span class=" text-decoration-underline">Code contact :</span><span> <?php echo $contact['code']; ?></span></p>
+                            <p class="card-text"><span class="text-decoration-underline">Pays de naissance :</span><span> <?php echo $contact['nationality']; ?></span></p>
+                            <p class="card-text"><span class="text-decoration-underline">Date de naissanse :</span><span> <?php echo $date->format('d-m-Y'); ?></span></p>
+                        </div>
+                        <div class="card-footer mt-4">
+                            <a class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#modal<?= $contact['id'] ?>">Supprimer</a>
                         </div>
                     </div>
-                </div>
-            <?php
-            }
-            $contacts->closeCursor(); // Termine le traitement de la requête
-            ?>
-        </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal<?= $contact['id'] ?>" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Supprimer</h3>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Confirmez vous la suppression ?</p>
+                                </div>
+                                <div class='modal-footer'>
+                                    <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $contact['id'] ?>&table=contacts"> Oui </a>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                $contacts->closeCursor(); // Termine le traitement de la requête
+                ?>
+            </div>
     </div>
     <!-- Pagination -->
     <nav class="m-4">
@@ -132,10 +139,13 @@ require_once('fonctions/connect.php');
             </li>
         </ul>
     </nav>
-    <!-- bootstrap js-->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <!-- js -->
-    <script src="assets/js/main.js"></script>
+<?php
+        }
+?>
+<!-- bootstrap js-->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- js -->
+<script src="assets/js/main.js"></script>
 </body>
 
 </html>

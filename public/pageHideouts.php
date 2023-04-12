@@ -44,31 +44,38 @@ require_once('fonctions/connect.php');
     <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
       <strong>HIDEOUTS</strong>
     </div>
-    <div class="card-deck">
-      <?php
-      // On récupère les agents
-      $hideouts = $con->query('SELECT * FROM hideouts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
-      // On affiche chaque entrée une à une
-      while ($hideout = $hideouts->fetch()) {
-      ?>
-        <div class="card mt-4">
-          <div class="card-header bg-dark">
-            <h5 class="card-title"><span class="h4 text-warning"><?php echo $hideout['type']; ?></span></h5>
-            <h6 class="card-subtitle mb-2 text-muted"><span class=" h5 text-white text-decoration-underline">Code :</span><span class="h5 text-white"> <?php echo $hideout['code']; ?></span></h6>
+    <?php
+    if ($entityTotal == 0) { ?>
+      <div class="alert alert-dismissible alert-danger">
+        <strong>Il n'y a aucune cachette enregistrée.</strong>
+      </div>
+    <?php
+    } else { ?>
+      <div class="card-deck">
+        <?php
+        // On récupère les agents
+        $hideouts = $con->query('SELECT * FROM hideouts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+        // On affiche chaque entrée une à une
+        while ($hideout = $hideouts->fetch()) {
+        ?>
+          <div class="card mt-4">
+            <div class="card-header bg-dark">
+              <h5 class="card-title"><span class="h4 text-warning"><?php echo $hideout['type']; ?></span></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><span class=" h5 text-white text-decoration-underline">Code :</span><span class="h5 text-white"> <?php echo $hideout['code']; ?></span></h6>
+            </div>
+            <div class="card-body">
+              <p class="card-text"><span class=" text-decoration-underline">Adresse :</span><span> <?php echo $hideout['address']; ?></span></p>
+              <p class="card-text"><span class="text-decoration-underline">Pays :</span><span> <?php echo $hideout['country']; ?></span></p>
+            </div>
           </div>
-          <div class="card-body">
-            <p class="card-text"><span class=" text-decoration-underline">Adresse :</span><span> <?php echo $hideout['address']; ?></span></p>
-            <p class="card-text"><span class="text-decoration-underline">Pays :</span><span> <?php echo $hideout['country']; ?></span></p>
-          </div>
-        </div>
-      <?php
-      }
-      $hideouts->closeCursor(); // Termine le traitement de la requête
-      ?>
-    </div>
+        <?php
+        }
+        $hideouts->closeCursor(); // Termine le traitement de la requête
+        ?>
+      </div>
   </div>
-    <!-- Pagination -->
-    <nav class="m-4">
+  <!-- Pagination -->
+  <nav class="m-4">
     <ul class="pagination pagination-lg justify-content-center">
       <li class="page-item">
         <?php
@@ -105,10 +112,13 @@ require_once('fonctions/connect.php');
       </li>
     </ul>
   </nav>
-  <!-- bootstrap js-->
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <!-- js -->
-  <script src="assets/js/main.js"></script>
+<?php
+    }
+?>
+<!-- bootstrap js-->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- js -->
+<script src="assets/js/main.js"></script>
 </body>
 
 </html>
