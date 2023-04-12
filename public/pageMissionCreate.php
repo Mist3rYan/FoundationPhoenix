@@ -1,6 +1,7 @@
 <?php
 session_start(); //démarre la session
 require_once('fonctions/connect.php'); //charge la connexion à la base de données
+
 // Spécialités
 $stacks = [];
 $stackIds = [];
@@ -64,10 +65,49 @@ if (isset($_POST['create'])) {
   $description = $_POST['descr'];
   $dateDebut = $_POST['date_debut'];
   $dateFin = $_POST['date_fin'];
-  $agentListeIds = $_POST['agent'];
-  $targetListeIds = $_POST['target'];
-  $contactListeIds = $_POST['contact'];
-  $hideoutListeIds = $_POST['hideout'];
+  $specialitieRequise = [];
+
+  if(!empty($_POST['target'])) {
+    $targetListeIds = $_POST['target'];
+  } else {
+    $targetListeIds = '';
+    $_SESSION['message'] = " Merci de sélectionner une cible ! "; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+    header('Location: pageMissionCreate.php');
+    exit();
+  }
+
+  if(!empty($_POST['contact'])){
+    $contactListeIds = $_POST['contact'];
+  } else {
+    $contactListeIds = '';
+    $_SESSION['message'] = " Merci de sélectionner un contact ! "; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+    header('Location: pageMissionCreate.php');
+    exit();
+  }
+
+  if(!empty($_POST['hideout'])) {
+    $hideoutListeIds = $_POST['hideout'];
+  } else {
+    $hideoutListeIds = '';
+  }
+
+  if (!empty($_POST['agent'])) {
+    $agentListeIds = $_POST['agent'];
+    for ($i = 0; $i < count($agentListeIds); $i++) {
+      $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+      $stmt->execute([$agentListeIds[$i]]);
+      $agent = $stmt->fetch();
+      array_push($specialitieRequise, $agent['speciality']);
+    }
+  } else {
+    $agentListeIds = '';
+    $_SESSION['message'] = " Merci de sélectionner un agent ! "; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+    header('Location: pageMissionCreate.php');
+    exit();
+  }
 
   if (($_POST['type_mission']) !== 'Type de mission...') {
     $typeDeMission = $_POST['type_mission'];
@@ -91,6 +131,15 @@ if (isset($_POST['create'])) {
 
   if (($_POST['specialitie_requ']) !== 'Spécialité requise...') {
     $specialitieRequ = $_POST['specialitie_requ'];
+    $stmt = $con->prepare("SELECT * FROM specialities WHERE id=?");
+    $stmt->execute([$specialitieRequ]);
+    $specialitieRequ = $stmt->fetch();
+    if (!in_array($specialitieRequ['name'], $specialitieRequise)) {
+      $_SESSION['message'] = " Merci de sélectionner un agent avec la spécialité requise ! "; //stocke le message dans une variable de session
+      $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+      header('Location: pageMissionCreate.php');
+      exit();
+    }
   } else {
     $specialitieRequ = '';
     $_SESSION['message'] = " Merci de sélectionner une spécialité ! "; //stocke le message dans une variable de session
@@ -231,7 +280,7 @@ if (isset($_POST['create'])) {
           <input type="text" class="form-control" name="titre" placeholder="Titre" required>
         </div>
         <div class="col">
-          <select id="type_mission" name="type_mission" class="form-control">
+          <select id="type_mission" name="type_mission" class="form-control" required>
             <option selected>Type de mission...</option>
             <?php foreach ($type_mission as $value) { ?>
               <option value="<?php echo $value ?>"><?php echo $value ?></option>
@@ -244,7 +293,7 @@ if (isset($_POST['create'])) {
           <input type="text" class="form-control" name="descr" placeholder="Description" required>
         </div>
         <div class="col">
-          <select id="pays" name="pays" class="form-control" onChange="filtrePays();">
+          <select id="pays" name="pays" class="form-control" onChange="filtrePays();" required>
             <option selected>Pays...</option>
             <?php foreach ($country as $value) { ?>
               <option value="<?php echo $value ?>"><?php echo $value ?></option>
@@ -255,7 +304,7 @@ if (isset($_POST['create'])) {
       <div class="row mt-4">
         <div class="col">
           <label for="contact" class="form-label">Contacts</label>
-          <select multiple id="contact" name="contact[]" class="form-control" disabled="disabled">
+          <select multiple id="contact" name="contact[]" class="form-control" disabled="disabled" required>
             <?php foreach ($stackContacts as $index => $stackContact) { ?>
               <option value="<?php echo $stackContactIds[$index] ?>" id="<?php echo $stackContactCountrys[$index] ?>"><?php echo $stackContact . " - " . $stackContactCountrys[$index] ?></option>
             <?php } ?>
@@ -280,7 +329,7 @@ if (isset($_POST['create'])) {
           <input type="date" class="form-control" name="date_fin">
         </div>
         <div class="col">
-          <select id="status" name="status" class="form-control">
+          <select id="status" name="status" class="form-control" required>
             <option selected>Statut de la mission...</option>
             <?php foreach ($status as $value) { ?>
               <option value="<?php echo $value ?>"><?php echo $value ?></option>
@@ -291,14 +340,14 @@ if (isset($_POST['create'])) {
       <div class="row mt-4 align-items-center">
         <div class="col">
           <label for="target" class="form-label">Targets</label>
-          <select multiple id="target" name="target[]" class="form-control" onChange="filtreAgents();">
+          <select multiple id="target" name="target[]" class="form-control" onChange="filtreAgents();" required>
             <?php foreach ($stackTargets as $index => $stackTarget) { ?>
               <option value="<?php echo $stackTargetIds[$index] ?>" id="<?php echo $stackTargetCountrys[$index] ?>"><?php echo $stackTarget . " - " . $stackTargetCountrys[$index] ?></option>
             <?php } ?>
           </select>
         </div>
         <div class="col">
-          <select id="specialitie_requ" name="specialitie_requ" class="form-control">
+          <select id="specialitie_requ" name="specialitie_requ" class="form-control" required>
             <option selected>Spécialité requise...</option>
             <?php foreach ($stacks as $index => $stack) { ?>
               <option value="<?php echo $stackIds[$index] ?>"><?php echo $stack ?></option>
@@ -309,9 +358,9 @@ if (isset($_POST['create'])) {
       <div class="row mt-4">
         <div class="col">
           <label for="agent" class="form-label">Agents</label>
-          <select multiple id="agent" name="agent[]" class="form-control" disabled="disabled">
+          <select multiple id="agent" name="agent[]" class="form-control" disabled="disabled" required>
             <?php foreach ($stackAgents as $index => $stackAgent) { ?>
-              <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index]."-".$stackAgentSpecs[$index] ?></option>
+              <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "-" . $stackAgentSpecs[$index] ?></option>
             <?php } ?>
           </select>
         </div>

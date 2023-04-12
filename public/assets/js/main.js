@@ -28,19 +28,15 @@ function filtreAgents(){
     for(let i = 0; i < longueurTarget; i++){
         if(document.getElementById("target").options[i].selected){
             valueAgentList.push(document.getElementById("target").options[i].id);
-            console.log(valueAgentList);
         }
     }
     let longueurAgent = document.getElementById("agent").options.length;
 
     for(let j = 0; j < longueurAgent; j++){
         let countryAgent= document.getElementById("agent").options[j].id ;
-        console.log(countryAgent);
         if(valueAgentList.includes(countryAgent)){
-            console.log(document.getElementById("agent").options[j].id);
             document.getElementById("agent").options[j].style.display = "none";
         }else{
-            console.log("pas de correspondance");
             document.getElementById("agent").options[j].style.display = "block";
         }
         document.getElementById("agent").disabled = false;
