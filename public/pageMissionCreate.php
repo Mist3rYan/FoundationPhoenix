@@ -67,7 +67,7 @@ if (isset($_POST['create'])) {
   $dateFin = $_POST['date_fin'];
   $specialitieRequise = [];
 
-  if(!empty($_POST['target'])) {
+  if (!empty($_POST['target'])) {
     $targetListeIds = $_POST['target'];
   } else {
     $targetListeIds = '';
@@ -77,7 +77,7 @@ if (isset($_POST['create'])) {
     exit();
   }
 
-  if(!empty($_POST['contact'])){
+  if (!empty($_POST['contact'])) {
     $contactListeIds = $_POST['contact'];
   } else {
     $contactListeIds = '';
@@ -87,7 +87,7 @@ if (isset($_POST['create'])) {
     exit();
   }
 
-  if(!empty($_POST['hideout'])) {
+  if (!empty($_POST['hideout'])) {
     $hideoutListeIds = $_POST['hideout'];
   } else {
     $hideoutListeIds = '';
@@ -99,7 +99,10 @@ if (isset($_POST['create'])) {
       $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
       $stmt->execute([$agentListeIds[$i]]);
       $agent = $stmt->fetch();
-      array_push($specialitieRequise, $agent['speciality']);
+      $transforme = explode(',', $agent['speciality']);
+      $retire = array('[', ']', '"');
+      $transforme = str_replace($retire, '', $transforme);
+      array_push($specialitieRequise, $transforme);
     }
   } else {
     $agentListeIds = '';
@@ -129,13 +132,31 @@ if (isset($_POST['create'])) {
     exit();
   }
 
+  if (($_POST['status']) !== 'Statut de la mission...') {
+    $status = $_POST['status'];
+  } else {
+    $status = '';
+    $_SESSION['message'] = " Merci de sélectionner un status ! "; //stocke le message dans une variable de session
+    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+    header('Location: pageMissionCreate.php');
+    exit();
+  }
+
   if (($_POST['specialitie_requ']) !== 'Spécialité requise...') {
     $specialitieRequ = $_POST['specialitie_requ'];
     $stmt = $con->prepare("SELECT * FROM specialities WHERE id=?");
     $stmt->execute([$specialitieRequ]);
     $specialitieRequ = $stmt->fetch();
-    if (!in_array($specialitieRequ['name'], $specialitieRequise)) {
-      $_SESSION['message'] = " Merci de sélectionner un agent avec la spécialité requise ! "; //stocke le message dans une variable de session
+    $item = $specialitieRequ['name'];
+    $found  = false;
+    foreach ($specialitieRequise as $subarray) {
+      if (in_array($item, $subarray)) {
+        $found = true;
+        break;
+      }
+    }
+    if ($found == false) {
+      $_SESSION['message'] = " Merci de sélectionner un agent avec la spécialité requise !"; //stocke le message dans une variable de session
       $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
       header('Location: pageMissionCreate.php');
       exit();
@@ -143,16 +164,6 @@ if (isset($_POST['create'])) {
   } else {
     $specialitieRequ = '';
     $_SESSION['message'] = " Merci de sélectionner une spécialité ! "; //stocke le message dans une variable de session
-    $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
-    header('Location: pageMissionCreate.php');
-    exit();
-  }
-
-  if (($_POST['status']) !== 'Statut de la mission...') {
-    $status = $_POST['status'];
-  } else {
-    $status = '';
-    $_SESSION['message'] = " Merci de sélectionner un status ! "; //stocke le message dans une variable de session
     $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
     header('Location: pageMissionCreate.php');
     exit();
@@ -168,7 +179,7 @@ if (isset($_POST['create'])) {
   } else {
     // le nom d'utilisateur n'existe pas
     $stmt = $con->prepare("INSERT INTO missions (titre, description, nom_de_code, country, type_mission, status, date_debut, date_fin,specialitie_id) VALUES (?, ?, ?, ?, ?, ?,?,?,?)");
-    $stmt->execute([$titre, $description, $nomDeCode, $pays, $typeDeMission, $status, $dateDebut, $dateFin, $specialitieRequ]);
+    $stmt->execute([$titre, $description, $nomDeCode, $pays, $typeDeMission, $status, $dateDebut, $dateFin, $specialitieRequ['id']]);
     $missionID = $con->lastInsertId();
     if ($stmt) {
       $_SESSION['message'] = " Mission créée avec succès !"; //stocke le message dans une variable de session
@@ -178,9 +189,11 @@ if (isset($_POST['create'])) {
         $stmt = $con->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
         $stmt->execute([$missionID, $agentListeIds[$i]]);
       }
-      for ($i = 0; $i < count($hideoutListeIds); $i++) {
-        $stmt = $con->prepare("INSERT INTO hideouts_has_missions (mission_id, hideouts_id) VALUES (?, ?)");
-        $stmt->execute([$missionID, $hideoutListeIds[$i]]);
+      if($hideoutListeIds != '') {
+        for ($i = 0; $i < count($hideoutListeIds); $i++) {
+          $stmt = $con->prepare("INSERT INTO hideouts_has_missions (mission_id, hideouts_id) VALUES (?, ?)");
+          $stmt->execute([$missionID, $hideoutListeIds[$i]]);
+        }
       }
       for ($i = 0; $i < count($contactListeIds); $i++) {
         $stmt = $con->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
