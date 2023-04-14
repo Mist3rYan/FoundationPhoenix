@@ -91,7 +91,6 @@ require_once('fonctions/connect.php');
                                     <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $contact['id'] ?>&table=contacts"> Oui </a>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
-
                             </div>
                         </div>
                     </div>

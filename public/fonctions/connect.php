@@ -14,8 +14,8 @@ try {
     // ON DEFINIT LA METHODE DE RECUPERATION DES DONNEES
     $con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    $_SESSION['message'] = "Erreur : " . $e->getMessage(); //stocke le message dans une variable de session
+    $_SESSION['message'] = "Erreur : Merci d'ajouter les fixtures à partir de la pager d'accueil"; //stocke le message dans une variable de session
     $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
-    header('Location: ../index.php');
+    header('Location: ./index.php');
     exit();
 }

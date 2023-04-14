@@ -81,8 +81,8 @@ try {
             `agent_id` INT NOT NULL,
             `mission_id` INT NOT NULL,
             PRIMARY KEY (`agent_id`, `mission_id`),
-            FOREIGN KEY (`agent_id`) REFERENCES `Agents`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (`mission_id`) REFERENCES `Missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (`agent_id`) REFERENCES `agents`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (`mission_id`) REFERENCES `missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
         $dbco->exec($sql);
 
@@ -90,8 +90,8 @@ try {
             `contact_id` INT NOT NULL,
             `mission_id` INT NOT NULL,
             PRIMARY KEY (`contact_id`, `mission_id`),
-            FOREIGN KEY (`contact_id`) REFERENCES `Contacts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (`mission_id`) REFERENCES `Missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (`contact_id`) REFERENCES `contacts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (`mission_id`) REFERENCES `missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
         $dbco->exec($sql);
 
@@ -99,8 +99,8 @@ try {
             `cible_id` INT NOT NULL,
             `mission_id` INT NOT NULL,
             PRIMARY KEY (`cible_id`, `mission_id`),
-            FOREIGN KEY (`cible_id`) REFERENCES `Targets`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (`mission_id`) REFERENCES `Missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (`cible_id`) REFERENCES `targets`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (`mission_id`) REFERENCES `missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
         $dbco->exec($sql);
 
@@ -108,8 +108,8 @@ try {
             `hideouts_id` INT NOT NULL,
             `mission_id` INT NOT NULL,
             PRIMARY KEY (`hideouts_id`, `mission_id`),
-            FOREIGN KEY (`hideouts_id`) REFERENCES `Hideouts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (`mission_id`) REFERENCES `Missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (`hideouts_id`) REFERENCES `hideouts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (`mission_id`) REFERENCES `missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
         $dbco->exec($sql);
 
@@ -121,18 +121,6 @@ try {
                     `password` VARCHAR (50) NOT NULL,
                     `createdAt` DATE NOT NULL
                 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
-        $dbco->exec($sql);
-
-        $sql = " INSERT INTO
-                Users(name, firstname, email, password, createdAt)
-                values
-                (
-                    'Thornton',
-                    'Peter',
-                    'peter.thornton@foundationphoenix.org',
-                    'admin',
-                    Now()
-                )";
         $dbco->exec($sql);
     } else {
         $_SESSION['message'] = "Les fixtures ont déja été ajoutées"; //stocke le message dans une variable de session

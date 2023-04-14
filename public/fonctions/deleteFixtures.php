@@ -11,6 +11,6 @@ try {
     $_SESSION['message'] = "Erreur : " . $e->getMessage(); //stocke le message dans une variable de session
     $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
 }
-
+session_destroy();  
 header('Location: ../index.php');
 exit();

@@ -174,6 +174,44 @@ for ($i = 0; $i < $nbHideout; $i++) {
         $hideout->getType()
     ));
 }
+$sql = " INSERT INTO
+Users(name, firstname, email, password, createdAt)
+values
+(
+    'Thornton',
+    'Peter',
+    'peter.thornton@foundationphoenix.org',
+    'admin',
+    Now()
+)";
+$dbco->exec($sql);
+
+$sql = " INSERT INTO
+        Missions(titre, description, nom_de_code, country, type_mission, status, date_debut, date_fin, specialitie_id)
+        values
+        (
+            'Exemple de mission',
+            'Rentrer dans le bâtiment et récupérer les informations',
+            'Jupiter',
+            'France',
+            'Espionnage',
+            'En cours',
+            Now(),
+            Now(),
+            2
+        )";
+$dbco->exec($sql);
+
+$missionID = 1;
+
+$stmt = $dbco->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
+$stmt->execute([$missionID, 1]);
+$stmt = $dbco->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
+$stmt->execute([$missionID, 1]);
+$stmt = $dbco->prepare("INSERT INTO cibles_has_missions (mission_id, cible_id) VALUES (?, ?)");
+$stmt->execute([$missionID, 1]);
+
+
 
 $_SESSION['message'] = "Les données ont bien été ajoutées !"; //stocke le message dans une variable de session
 $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)

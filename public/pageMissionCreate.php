@@ -284,15 +284,19 @@ if (isset($_POST['create'])) {
     <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
       <strong>CREATION MISSION</strong>
     </div>
+    <span class="text-danger">* Champs obligatoires</span>
     <form action="pageMissionCreate.php" method="post">
       <div class="row mt-4">
         <div class="col">
+        <label for="nom_de_code" class="form-label">Code *</label>
           <input type="text" class="form-control" name="nom_de_code" placeholder="Nom de Code" required>
         </div>
         <div class="col">
+        <label for="titre" class="form-label">Titre de la mission *</label>
           <input type="text" class="form-control" name="titre" placeholder="Titre" required>
         </div>
         <div class="col">
+        <label for="type_mission" class="form-label">Type de mission *</label>
           <select id="type_mission" name="type_mission" class="form-control" required>
             <option selected>Type de mission...</option>
             <?php foreach ($type_mission as $value) { ?>
@@ -303,9 +307,11 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4">
         <div class="col">
+        <label for="descr" class="form-label">Description *</label>
           <input type="text" class="form-control" name="descr" placeholder="Description" required>
         </div>
         <div class="col">
+        <label for="pays" class="form-label">Pays de la mission *</label>
           <select id="pays" name="pays" class="form-control" onChange="filtrePays();" required>
             <option selected>Pays...</option>
             <?php foreach ($country as $value) { ?>
@@ -316,7 +322,7 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4">
         <div class="col">
-          <label for="contact" class="form-label">Contacts</label>
+          <label for="contact" class="form-label">Contacts *</label>
           <select multiple id="contact" name="contact[]" class="form-control" disabled="disabled" required>
             <?php foreach ($stackContacts as $index => $stackContact) { ?>
               <option value="<?php echo $stackContactIds[$index] ?>" id="<?php echo $stackContactCountrys[$index] ?>"><?php echo $stackContact . " - " . $stackContactCountrys[$index] ?></option>
@@ -334,7 +340,7 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4 align-items-end">
         <div class="col">
-          <label for="date_debut" class="form-label">Date de début</label>
+          <label for="date_debut" class="form-label">Date de début *</label>
           <input type="date" class="form-control" name="date_debut" required>
         </div>
         <div class="col">
@@ -342,6 +348,7 @@ if (isset($_POST['create'])) {
           <input type="date" class="form-control" name="date_fin">
         </div>
         <div class="col">
+          <label for="status" class="form-label">Statut de la mission *</label>
           <select id="status" name="status" class="form-control" required>
             <option selected>Statut de la mission...</option>
             <?php foreach ($status as $value) { ?>
@@ -350,9 +357,9 @@ if (isset($_POST['create'])) {
           </select>
         </div>
       </div>
-      <div class="row mt-4 align-items-center">
+      <div class="row mt-4 ">
         <div class="col">
-          <label for="target" class="form-label">Targets</label>
+          <label for="target" class="form-label">Targets *</label>
           <select multiple id="target" name="target[]" class="form-control" onChange="filtreAgents();" required>
             <?php foreach ($stackTargets as $index => $stackTarget) { ?>
               <option value="<?php echo $stackTargetIds[$index] ?>" id="<?php echo $stackTargetCountrys[$index] ?>"><?php echo $stackTarget . " - " . $stackTargetCountrys[$index] ?></option>
@@ -360,6 +367,7 @@ if (isset($_POST['create'])) {
           </select>
         </div>
         <div class="col">
+          <label for="specialitie_requ" class="form-label">Spécialité requise *</label>
           <select id="specialitie_requ" name="specialitie_requ" class="form-control" required>
             <option selected>Spécialité requise...</option>
             <?php foreach ($stacks as $index => $stack) { ?>
@@ -370,7 +378,7 @@ if (isset($_POST['create'])) {
       </div>
       <div class="row mt-4">
         <div class="col">
-          <label for="agent" class="form-label">Agents</label>
+          <label for="agent" class="form-label">Agents *</label>
           <select multiple id="agent" name="agent[]" class="form-control" disabled="disabled" required>
             <?php foreach ($stackAgents as $index => $stackAgent) { ?>
               <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "-" . $stackAgentSpecs[$index] ?></option>
