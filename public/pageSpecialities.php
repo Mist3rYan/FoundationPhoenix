@@ -54,7 +54,7 @@ require_once('fonctions/connect.php');
       <div class="card-deck">
         <?php
         // On récupère les agents
-        $specialities = $con->query('SELECT * FROM specialities ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+        $specialities = $con->query('SELECT * FROM specialities ORDER BY id ASC LIMIT ' . $start . ',' . $entityByPage);
         // On affiche chaque entrée une à une
         while ($specialitie = $specialities->fetch()) {
         ?>

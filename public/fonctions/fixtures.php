@@ -11,19 +11,19 @@ $faker = Faker\Factory::create('fr_FR');
 
 // Spécialités
 $specialities = array(
+    'Concentration',
     'Cryptologie',
-    'Infiltration',
+    'Diplomatie',
+    'Droit', 
+    'Finance', 
+    'Infiltration', 
+    'Medecine',
     'Renseignement',
     'Securite',
-    'Diplomatie',
-    'Finance',
-    'Droit',
-    'Sport de combat',
-    'Concentration',
-    'Medecine'
+    'Sport de combat'
 );
 
-// Spécialités
+// Pays
 $country = array(
     'France',
     'Russie',
@@ -53,8 +53,39 @@ $country = array(
     'Equateur'
 );
 
+
+//Specialities
+$speciality = new Speciality();
+foreach ($specialities as $specialitie) {
+    $speciality->setName($specialitie);
+    // On insère les données dans la base de données
+    $req = $dbco->prepare("INSERT INTO specialities (name) VALUES (?)");
+    $req->execute(array(
+        $speciality->getName()
+    ));
+}
+
+
 //Agents
 $agent = new Agent();
+
+// On insère un agent manuellement pour faire un exemple mission
+$agent->setCode("DXSID N°XC4479");
+$agent->setName("MacGyver");
+$agent->setFirstname("Angus");
+$agent->setNationality('Etats-Unis');
+$agent->setBirthdate("1951-03-23");
+$agent->setSpeciality(["Renseignement","Diplomatie","Concentration","Securite"]);
+$req = $dbco->prepare("INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) VALUES (?,?,?,?,?,?)");
+$req->execute(array(
+    $agent->getCode(),
+    $agent->getName(),
+    $agent->getFirstname(),
+    $agent->getNationality(),
+    date($agent->getBirthdate()),
+    json_encode($agent->getSpeciality())
+));
+
 $nbAgents = 20;
 for ($i = 0; $i < $nbAgents; $i++) {
     $agent->setCode($faker->numberBetween(0, 10000));
@@ -85,13 +116,28 @@ for ($i = 0; $i < $nbAgents; $i++) {
         $agent->getName(),
         $agent->getFirstname(),
         $agent->getNationality(),
-        date($agent->getBirthdate()),
+        $agent->getBirthdate(),
         json_encode($agent->getSpeciality())
     ));
 }
 
 //Contacts
 $contact = new User();
+// On insère un contact manuellement pour faire un exemple mission
+$contact->setCode("5s9578");
+$contact->setName("Dalton");
+$contact->setFirstname("Jack");
+$contact->setNationality('Etats-Unis');
+$contact->setBirthdate("1951-02-03");
+$req = $dbco->prepare("INSERT INTO contacts (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
+$req->execute(array(
+    $contact->getCode(),
+    $contact->getName(),
+    $contact->getFirstname(),
+    $contact->getNationality(),
+    $contact->getBirthdate()
+));
+
 $nbContact = 20;
 for ($i = 0; $i < $nbContact; $i++) {
     $contact->setCode($faker->numberBetween(0, 10000));
@@ -119,6 +165,22 @@ for ($i = 0; $i < $nbContact; $i++) {
 
 //Targets
 $target = new User();
+// On insère une cible manuellement pour faire un exemple mission
+$target->setCode("Mercenaire N°XC4479");
+$target->setName("Murdoc");
+$target->setFirstname("Francis");
+$target->setNationality('France');
+$target->setBirthdate("2002-02-15");
+
+$req = $dbco->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
+$req->execute(array(
+    $target->getCode(),
+    $target->getName(),
+    $target->getFirstname(),
+    $target->getNationality(),
+    $target->getBirthdate()
+));
+
 $nbTarget = 20;
 for ($i = 0; $i < $nbTarget; $i++) {
     $target->setCode($faker->numberBetween(0, 10000));
@@ -140,17 +202,6 @@ for ($i = 0; $i < $nbTarget; $i++) {
         $target->getFirstname(),
         $target->getNationality(),
         date($target->getBirthdate())
-    ));
-}
-
-//Specialities
-$speciality = new Speciality();
-foreach ($specialities as $specialitie) {
-    $speciality->setName($specialitie);
-    // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO specialities (name) VALUES (?)");
-    $req->execute(array(
-        $speciality->getName()
     ));
 }
 
@@ -191,14 +242,14 @@ $sql = " INSERT INTO
         values
         (
             'Exemple de mission',
-            'Rentrer dans le bâtiment et récupérer les informations',
+            'Eliminer Murdoc, mercenaire français',
             'Jupiter',
-            'France',
-            'Espionnage',
+            'Etats-Unis',
+            'Assassinat',
             'En cours',
             Now(),
             Now(),
-            2
+            1
         )";
 $dbco->exec($sql);
 

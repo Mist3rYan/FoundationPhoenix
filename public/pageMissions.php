@@ -82,11 +82,11 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             ?>
               <tr>
                 <th scope="row">Cible <?php echo $i; ?></th>
-                <td>Code cible: <?php echo $cible['code'] ?></td>
-                <td>Nom: <?php echo $cible['name'] ?></td>
-                <td>Prenom: <?php echo $cible['firstname'] ?></td>
-                <td>Pays de naissance: <?php echo $cible['nationality'] ?></td>
-                <td colspan="2">Né le: <?php $date = new DateTime($cible['birthdate']);
+                <td>Code cible: <br> <?php echo $cible['code'] ?></td>
+                <td>Nom:<br>  <?php echo $cible['name'] ?></td>
+                <td>Prenom: <br> <?php echo $cible['firstname'] ?></td>
+                <td>Pays de naissance:<br>  <?php echo $cible['nationality'] ?></td>
+                <td colspan="2">Né le:<br>  <?php $date = new DateTime($cible['birthdate']);
                                         echo $date->format('d-m-Y'); ?></td>
               </tr>
             <?php
@@ -155,12 +155,12 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             ?>
               <tr>
                 <th scope="row">Agent <?php echo $i; ?></th>
-                <td>Code agent: <?php echo $agent['code'] ?></td>
-                <td>Nom: <?php echo $agent['name'] ?></td>
-                <td>Prenom: <?php echo $agent['firstname'] ?></td>
-                <td>Pays de naissance: <?php echo $agent['nationality'] ?></td>
+                <td>Code agent: <br> <?php echo $agent['code'] ?></td>
+                <td>Nom: <br> <?php echo $agent['name'] ?></td>
+                <td>Prenom: <br> <?php echo $agent['firstname'] ?></td>
+                <td>Pays de naissance: <br> <?php echo $agent['nationality'] ?></td>
                 <td><?php echo $array ?></td>
-                <td>Né le: <?php $date = new DateTime($agent['birthdate']);
+                <td>Né le: <br> <?php $date = new DateTime($agent['birthdate']);
                             echo $date->format('d-m-Y'); ?></td>
               </tr>
             <?php
@@ -186,11 +186,11 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             ?>
               <tr>
                 <th scope="row">Contact <?php echo $i; ?></th>
-                <td>Code contact: <?php echo $contact['code'] ?></td>
-                <td>Nom: <?php echo $contact['name'] ?></td>
-                <td>Prenom: <?php echo $contact['firstname'] ?></td>
-                <td>Pays de naissance: <?php echo $contact['nationality'] ?></td>
-                <td colspan="2">Né le: <?php $date = new DateTime($contact['birthdate']);
+                <td>Code contact: <br> <?php echo $contact['code'] ?></td>
+                <td>Nom: <br> <?php echo $contact['name'] ?></td>
+                <td>Prenom: <br> <?php echo $contact['firstname'] ?></td>
+                <td>Pays de naissance: <br> <?php echo $contact['nationality'] ?></td>
+                <td colspan="2">Né le: <br> <?php $date = new DateTime($contact['birthdate']);
                                         echo $date->format('d-m-Y'); ?></td>
               </tr>
             <?php
@@ -216,10 +216,10 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             ?>
               <tr>
                 <th scope="row">Planque <?php echo $i; ?></th>
-                <td>Code de la planque: <?php echo $hideout['code'] ?></td>
-                <td>Type: <?php echo $hideout['type'] ?></td>
-                <td colspan="2">Adresse: <?php echo $hideout['address'] ?></td>
-                <td colspan="2">Pays: <?php echo $hideout['country'] ?></td>
+                <td>Code de la planque: <br> <?php echo $hideout['code'] ?></td>
+                <td>Type: <br> <?php echo $hideout['type'] ?></td>
+                <td colspan="2">Adresse: <br> <?php echo $hideout['address'] ?></td>
+                <td colspan="2">Pays: <br> <?php echo $hideout['country'] ?></td>
               </tr>
             <?php
               $i++;

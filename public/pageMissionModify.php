@@ -222,7 +222,16 @@ $hideouts->closeCursor(); // Termine le traitement de la requête
                     <div class="col">
                         <label for="hideout" class="form-label">Hideouts</label>
                         <select multiple id="hideout" name="hideout[]" class="form-control" disabled="disabled">
-                            <?php foreach ($stackHideouts as $index => $stackHideout) { ?>
+                            <?php                             
+                            $query = "SELECT * FROM contacts_has_missions WHERE mission_id = :id";
+                            $statement = $con->prepare($query);
+                            $statement->execute(
+                                array(
+                                    'id' => $mission['id']
+                                )
+                            );
+                            
+                            foreach ($stackHideouts as $index => $stackHideout) { ?>
                                 <option value="<?php echo $stackHideoutIds[$index] ?>" id="<?php echo $stackHideoutCountrys[$index] ?>"><?php echo $stackHideout . " - " . $stackHideoutCountrys[$index] ?></option>
                             <?php } ?>
 
