@@ -60,6 +60,207 @@ while ($hideout = $hideouts->fetch()) {
     array_push($stackHideoutIds, $hideout['id']);
 }
 $hideouts->closeCursor(); // Termine le traitement de la requête
+
+if (isset($_POST['update'])) {
+    $idMission= $_POST['id_mission'];
+    $nomDeCode = $_POST['nom_de_code'];
+    $titre = $_POST['titre'];
+    $description = $_POST['descr'];
+    $dateDebut = $_POST['date_debut'];
+    $dateFin = $_POST['date_fin'];
+    $specialitieRequise = [];
+
+    if (!empty($_POST['target'])) {
+        $targetListeIds = $_POST['target'];
+    } else {
+        $targetListeIds = '';
+        $_SESSION['message'] = " Merci de sélectionner une cible ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (!empty($_POST['contact'])) {
+        $contactListeIds = $_POST['contact'];
+    } else {
+        $contactListeIds = '';
+        $_SESSION['message'] = " Merci de sélectionner un contact ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (!empty($_POST['hideout'])) {
+        $hideoutListeIds = $_POST['hideout'];
+    } else {
+        $hideoutListeIds = '';
+    }
+
+    if (!empty($_POST['agent'])) {
+        $agentListeIds = $_POST['agent'];
+        for ($i = 0; $i < count($agentListeIds); $i++) {
+            $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+            $stmt->execute([$agentListeIds[$i]]);
+            $agent = $stmt->fetch();
+            $transforme = explode(',', $agent['speciality']);
+            $retire = array('[', ']', '"');
+            $transforme = str_replace($retire, '', $transforme);
+            array_push($specialitieRequise, $transforme);
+        }
+    } else {
+        $agentListeIds = '';
+        $_SESSION['message'] = " Merci de sélectionner un agent ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (($_POST['type_mission']) !== 'Type de mission...') {
+        $typeDeMission = $_POST['type_mission'];
+    } else {
+        $typeDeMission = '';
+        $_SESSION['message'] = " Merci de sélectionner un type de misssion! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (($_POST['pays']) !== 'Pays...') {
+        $pays = $_POST['pays'];
+    } else {
+        $pays = '';
+        $_SESSION['message'] = " Merci de sélectionner un pays ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (($_POST['status']) !== 'Statut de la mission...') {
+        $status = $_POST['status'];
+    } else {
+        $status = '';
+        $_SESSION['message'] = " Merci de sélectionner un status ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    if (($_POST['specialitie_requ']) !== 'Spécialité requise...') {
+        $specialitieRequ = $_POST['specialitie_requ'];
+        $stmt = $con->prepare("SELECT * FROM specialities WHERE id=?");
+        $stmt->execute([$specialitieRequ]);
+        $specialitieRequ = $stmt->fetch();
+        $item = $specialitieRequ['name'];
+        $found  = false;
+        foreach ($specialitieRequise as $subarray) {
+            if (in_array($item, $subarray)) {
+                $found = true;
+                break;
+            }
+        }
+        if ($found == false) {
+            $_SESSION['message'] = " Merci de sélectionner un agent avec la spécialité requise !"; //stocke le message dans une variable de session
+            $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+            header('Location: pageMissionModify.php');
+            exit();
+        }
+    } else {
+        $specialitieRequ = '';
+        $_SESSION['message'] = " Merci de sélectionner une spécialité ! "; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
+        header('Location: pageMissionModify.php');
+        exit();
+    }
+
+    // le nom d'utilisateur n'existe pas
+    $stmt = $con->prepare("UPDATE missions SET titre=?, description=?, nom_de_code=?, country=?, type_mission=?, status=?, date_debut=?, date_fin=?,specialitie_id=? WHERE id=?");
+    $stmt->execute([$titre, $description, $nomDeCode, $pays, $typeDeMission, $status, $dateDebut, $dateFin, $specialitieRequ['id'], $idMission]);
+
+    if ($stmt) {
+        $_SESSION['message'] = " Mission mise à jour avec succès !"; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
+
+        $sql = "DELETE FROM agents_has_missions WHERE `mission_id` = :id";
+        //Préparez notre déclaration DELETE
+        $stmt = $con->prepare($sql);
+        // id de la ligne à supprimer
+        $id = $idMission;
+        //id de la ligne à supprimer
+        $stmt->bindValue(':id', $id);
+        //Exécuter notre instruction DELETE
+        $res = $stmt->execute();
+        $agentListeIds = $_POST['agent'];
+        for ($i = 0; $i < count($agentListeIds); $i++) {
+            $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+            $stmt->execute([$agentListeIds[$i]]);
+            $agent = $stmt->fetch();
+            $stmt = $con->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
+            $stmt->execute([$idMission, $agent['id']]);
+        }
+
+        if ($hideoutListeIds != '') {
+
+            $sql = "DELETE FROM hideouts_has_missions WHERE `mission_id` = :id";
+            //Préparez notre déclaration DELETE
+            $stmt = $con->prepare($sql);
+            // id de la ligne à supprimer
+            $id = $idMission;
+            //id de la ligne à supprimer
+            $stmt->bindValue(':id', $id);
+            //Exécuter notre instruction DELETE
+            $res = $stmt->execute();
+
+            for ($i = 0; $i < count($hideoutListeIds); $i++) {
+                $stmt = $con->prepare("SELECT * FROM hideouts WHERE id=?");
+                $stmt->execute([$hideoutListeIds[$i]]);
+                $hideout = $stmt->fetch();
+                $stmt = $con->prepare("INSERT INTO hideouts_has_missions (mission_id, hideouts_id) VALUES (?, ?)");
+                $stmt->execute([$idMission, $hideout['id']]);
+            }
+        }
+
+        $sql = "DELETE FROM contacts_has_missions WHERE `mission_id` = :id";
+        //Préparez notre déclaration DELETE
+        $stmt = $con->prepare($sql);
+        // id de la ligne à supprimer
+        $id = $idMission;
+        //id de la ligne à supprimer
+        $stmt->bindValue(':id', $id);
+        //Exécuter notre instruction DELETE
+        $res = $stmt->execute();
+
+        for ($i = 0; $i < count($contactListeIds); $i++) {
+            $stmt = $con->prepare("SELECT * FROM contacts WHERE id=?");
+            $stmt->execute([$contactListeIds[$i]]);
+            $contact = $stmt->fetch();
+            $stmt = $con->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
+            $stmt->execute([$idMission, $contact['id']]);
+        }
+        
+        $sql = "DELETE FROM cibles_has_missions WHERE `mission_id` = :id";
+        //Préparez notre déclaration DELETE
+        $stmt = $con->prepare($sql);
+        // id de la ligne à supprimer
+        $id = $idMission;
+        //id de la ligne à supprimer
+        $stmt->bindValue(':id', $id);
+        //Exécuter notre instruction DELETE
+        $res = $stmt->execute();
+        for ($i = 0; $i < count($targetListeIds); $i++) {
+            $stmt = $con->prepare("SELECT * FROM targets WHERE id=?");
+            $stmt->execute([$targetListeIds[$i]]);
+            $target = $stmt->fetch();
+            $stmt = $con->prepare("INSERT INTO cibles_has_missions (mission_id, cible_id) VALUES (?, ?)");
+            $stmt->execute([$idMission, $target['id']]);
+        }
+
+/*         header('Location: pageMissions.php');
+        exit(); */
+    } else {
+        $_SESSION['message'] = " Erreur lors de la création de la mission !"; //stocke le message dans une variable de session
+        $_SESSION['message_type'] = "danger"; //définit le type de message (success, info, warning, danger)
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +278,7 @@ $hideouts->closeCursor(); // Termine le traitement de la requête
     <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 
-<body>
+<body onload="filtrePays()">
     <?php include '_partials/_header.php'; ?>
     <?php include '_partials/_messages.php'; ?>
     <?php
@@ -140,11 +341,13 @@ $hideouts->closeCursor(); // Termine le traitement de la requête
         );
     ?>
         <div class="container">
+        <form action="pageMissionModify.php" method="post">
             <div class="h2 text-center alert alert-dismissible alert-primary mt-4">
-                <strong>MODIFICATION MISSION</strong>
+                <strong>MODIFICATION MISSION ID <?php echo $mission['id'] ?></strong>
+                <input id="id_mission" name="id_mission" type="hidden" value="<?php echo $mission['id'] ?>">
             </div>
             <span class="text-danger">* Champs obligatoires</span>
-            <form action="pageMissionCreate.php" method="post">
+  
                 <div class="row mt-4">
                     <div class="col">
                         <label for="nom_de_code" class="form-label">Code *</label>
@@ -221,20 +424,39 @@ $hideouts->closeCursor(); // Termine le traitement de la requête
                     </div>
                     <div class="col">
                         <label for="hideout" class="form-label">Hideouts</label>
-                        <select multiple id="hideout" name="hideout[]" class="form-control" disabled="disabled">
-                            <?php                             
-                            $query = "SELECT * FROM contacts_has_missions WHERE mission_id = :id";
+                        <select multiple id="hideout" name="hideout[]" class="form-control">
+                            <?php
+                            $query = "SELECT * FROM hideouts_has_missions WHERE mission_id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
                                     'id' => $mission['id']
                                 )
                             );
-                            
-                            foreach ($stackHideouts as $index => $stackHideout) { ?>
-                                <option value="<?php echo $stackHideoutIds[$index] ?>" id="<?php echo $stackHideoutCountrys[$index] ?>"><?php echo $stackHideout . " - " . $stackHideoutCountrys[$index] ?></option>
-                            <?php } ?>
-
+                            if ($statement->rowCount() > 0) {
+                                while ($hideoutId = $statement->fetch(PDO::FETCH_ASSOC)) {
+                                    $queryHideout = "SELECT * FROM hideouts WHERE id = :id";
+                                    $statementHideout = $con->prepare($queryHideout);
+                                    $statementHideout->execute(
+                                        array(
+                                            'id' => $hideoutId['hideouts_id']
+                                        )
+                                    );
+                                    $hideout = $statementHideout->fetch(PDO::FETCH_ASSOC);
+                                    foreach ($stackHideouts as $index => $stackHideout) {
+                                        if ($stackHideoutIds[$index] == $hideout['id']) { ?>
+                                            <option value="<?php echo $stackHideoutIds[$index] ?>" id="<?php echo $stackHideoutCountrys[$index] ?>" selected><?php echo $stackHideout . " - " . $stackHideoutCountrys[$index] ?></option>}
+                                        <?php } else { ?>
+                                            <option value="<?php echo $stackHideoutIds[$index] ?>" id="<?php echo $stackHideoutCountrys[$index] ?>"><?php echo $stackHideout . " - " . $stackHideoutCountrys[$index] ?></option>
+                                    <?php }
+                                    }
+                                    $statementHideout->closeCursor();
+                                }
+                            } else {
+                                foreach ($stackHideouts as $index => $stackHideout) { ?>
+                                    <option value="<?php echo $stackHideoutIds[$index] ?>" id="<?php echo $stackHideoutCountrys[$index] ?>"><?php echo $stackHideout . " - " . $stackHideoutCountrys[$index] ?></option>
+                            <?php }
+                            } ?>
                         </select>
                     </div>
                 </div>
@@ -343,18 +565,22 @@ $hideouts->closeCursor(); // Termine le traitement de la requête
                                 );
                                 $agent = $statementAgent->fetch(PDO::FETCH_ASSOC);
                                 foreach ($stackAgents as $index => $stackAgent) {
+                                    $array = $stackAgentSpecs[$index];
+                                    $deleteCharac = array("[", "]", '"');
+                                    $array = str_replace($deleteCharac, "", $array);
                                     if ($stackAgent == $agent['code']) { ?>
-                                        <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>" selected><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "-" . $stackAgentSpecs[$index] ?></option>
+                                        <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>" selected><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "- [" . $array . "]" ?></option>
                                     <?php } else { ?>
-                                        <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "-" . $stackAgentSpecs[$index] ?></option>
+                                        <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "- [" . $array . "]" ?></option>
                             <?php }
                                 }
+                                $statementAgent->closeCursor();
                             } ?>
                         </select>
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" name="create">Modifier</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" name="update">Modifier</button>
                 </div>
             </form>
         </div>

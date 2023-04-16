@@ -380,8 +380,11 @@ if (isset($_POST['create'])) {
         <div class="col">
           <label for="agent" class="form-label">Agents *</label>
           <select multiple id="agent" name="agent[]" class="form-control" disabled="disabled" required>
-            <?php foreach ($stackAgents as $index => $stackAgent) { ?>
-              <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "-" . $stackAgentSpecs[$index] ?></option>
+            <?php foreach ($stackAgents as $index => $stackAgent) {
+              $array = $stackAgentSpecs[$index];
+              $deleteCharac = array("[", "]", '"');
+              $array = str_replace($deleteCharac, "", $array); ?>
+              <option value="<?php echo $stackAgentIds[$index] ?>" id="<?php echo $stackAgentCountrys[$index] ?>"><?php echo $stackAgent . " - " . $stackAgentCountrys[$index] . "- [" . $array ."]"?></option>
             <?php } ?>
           </select>
         </div>
