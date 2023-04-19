@@ -112,21 +112,21 @@ $specialities->closeCursor(); // Termine le traitement de la requête
         <li class="page-item">
           <?php
           if ($currentPage == 1) { ?>
-            <a class="page-link disabled" href="<?php echo 'pageMissions.php?page=' . $currentPage ?>">Précédent</a>
+            <a class="page-link disabled" href="pageMissions.php?page=<?=$currentPage?>">Précédent</a>
           <?php
           } else { ?>
-            <a class="page-link" href="<?php echo 'pageMissions.php?page=' . $currentPage - 1 ?>">Précédent</a>
+            <a class="page-link" href="pageMissions.php?page=<?=$currentPage- 1 ?>">Précédent</a>
           <?php
           } ?>
         </li>
         <?php
         for ($i = 1; $i <= $pageTotal; $i++) {
           if ($i != $currentPage) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo 'pageMissions.php?page=' . $i ?>"><?php echo $i ?></a> </li>
+            <li class="page-item"><a class="page-link" href="pageMissions.php?page=<?=$i ?>"><?php echo $i ?></a> </li>
           <?php
           } else { ?>
             <li class="page-item active">
-              <a class="page-link" href="<?php echo 'pageMissions.php?page=' . $i ?>"><?php echo $i ?></a>
+              <a class="page-link" href="pageMissions.php?page=<?=$i ?>"><?php echo $i ?></a>
             </li>
         <?php
           }
@@ -135,10 +135,10 @@ $specialities->closeCursor(); // Termine le traitement de la requête
         <li class="page-item">
           <?php
           if ($currentPage == $pageTotal) { ?>
-            <a class="page-link disabled" href="<?php echo 'pageMissions.php?page=' . $currentPage ?>">Suivant</a>
+            <a class="page-link disabled" href="pageMissions.php?page=<?=$currentPage?>">Suivant</a>
           <?php
           } else { ?>
-            <a class="page-link" href="<?php echo 'pageMissions.php?page=' . $currentPage + 1 ?>">Suivant</a>
+            <a class="page-link" href="pageMissions.php?page=<?=$currentPage+ 1 ?>">Suivant</a>
           <?php
           } ?>
         </li>

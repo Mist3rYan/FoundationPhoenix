@@ -17,8 +17,11 @@ $password = PASSWORD;
 $dbname = DBNAME;
 $port = PORT;
 
+// ON DEFINIT LE DSN
+
 $dbco = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$dbco->exec("SET CHARACTER SET utf8");
 // On crée une instance de Faker en FR
 $faker = Faker\Factory::create('fr_FR');
 
