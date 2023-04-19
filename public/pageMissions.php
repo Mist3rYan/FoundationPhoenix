@@ -3,7 +3,7 @@ session_start(); //démarre la session
 require_once('fonctions/connect.php');
 // Spécialités
 $stack = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
   array_push($stack, $specialitie['name']);
 }
@@ -30,7 +30,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
   <?php include '_partials/_messages.php'; ?>
   <?php
   if (isset($_GET['id']) and !empty($_GET['id'])) {
-    $query = "SELECT * FROM missions WHERE id = :id";
+    $query = "SELECT * FROM Missions WHERE id = :id";
     $statement = $con->prepare($query);
     $statement->execute(
       array(
@@ -62,7 +62,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
               <td colspan="6"><?php echo $mission['type_mission']; ?></td>
             </tr>
             <?php
-            $query = "SELECT * FROM cibles_has_missions WHERE mission_id = :id";
+            $query = "SELECT * FROM Cibles_has_Missions WHERE mission_id = :id";
             $statement = $con->prepare($query);
             $statement->execute(
               array(
@@ -71,7 +71,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             );
             $i = 1;
             while ($cibleId = $statement->fetch(PDO::FETCH_ASSOC)) {
-              $queryCible = "SELECT * FROM targets WHERE id = :id";
+              $queryCible = "SELECT * FROM Targets WHERE id = :id";
               $statementCible = $con->prepare($queryCible);
               $statementCible->execute(
                 array(
@@ -120,7 +120,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             <tr>
               <th scope="row">Spécialité requise: </th>
               <?php
-              $query = "SELECT * FROM specialities WHERE id = :id";
+              $query = "SELECT * FROM Specialities WHERE id = :id";
               $statement = $con->prepare($query);
               $statement->execute(
                 array(
@@ -132,7 +132,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
               <td colspan="6"><?php echo $speciality['name'] ?></td>
             </tr>
             <?php
-            $query = "SELECT * FROM agents_has_missions WHERE mission_id = :id";
+            $query = "SELECT * FROM Agents_has_Missions WHERE mission_id = :id";
             $statement = $con->prepare($query);
             $statement->execute(
               array(
@@ -141,7 +141,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             );
             $i = 1;
             while ($agentId = $statement->fetch(PDO::FETCH_ASSOC)) {
-              $queryAgent = "SELECT * FROM agents WHERE id = :id";
+              $queryAgent = "SELECT * FROM Agents WHERE id = :id";
               $statementAgent = $con->prepare($queryAgent);
               $statementAgent->execute(
                 array(
@@ -166,7 +166,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             <?php
               $i++;
             }
-            $query = "SELECT * FROM contacts_has_missions WHERE mission_id = :id";
+            $query = "SELECT * FROM Contacts_has_Missions WHERE mission_id = :id";
             $statement = $con->prepare($query);
             $statement->execute(
               array(
@@ -175,7 +175,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             );
             $i = 1;
             while ($contactId = $statement->fetch(PDO::FETCH_ASSOC)) {
-              $queryContact = "SELECT * FROM contacts WHERE id = :id";
+              $queryContact = "SELECT * FROM Contacts WHERE id = :id";
               $statementContact = $con->prepare($queryContact);
               $statementContact->execute(
                 array(
@@ -196,7 +196,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             <?php
               $i++;
             }
-            $query = "SELECT * FROM hideouts_has_missions WHERE mission_id = :id";
+            $query = "SELECT * FROM Hideouts_has_Missions WHERE mission_id = :id";
             $statement = $con->prepare($query);
             $statement->execute(
               array(
@@ -205,7 +205,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
             );
             $i = 1;
             while ($hideoutId = $statement->fetch(PDO::FETCH_ASSOC)) {
-              $queryHideout = "SELECT * FROM hideouts WHERE id = :id";
+              $queryHideout = "SELECT * FROM Hideouts WHERE id = :id";
               $statementHideout = $con->prepare($queryHideout);
               $statementHideout->execute(
                 array(
@@ -241,7 +241,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
     // On récupère le nombre d'agents par page
     $entityByPage = 3;
     // On récupère le nombre total d'agents
-    $entityTotalReq = $con->query('SELECT id FROM missions');
+    $entityTotalReq = $con->query('SELECT id FROM Missions');
     // On calcule le nombre de pages total
     $entityTotal = $entityTotalReq->rowCount();
     // On arrondit au nombre supérieur le nombre de pages
@@ -270,7 +270,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
         <div class="card-deck">
           <?php
           // On récupère les agents
-          $missions = $con->query('SELECT * FROM missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+          $missions = $con->query('SELECT * FROM Missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
           // On affiche chaque entrée une à une
           while ($mission = $missions->fetch()) {
           ?>

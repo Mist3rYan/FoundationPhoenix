@@ -19,7 +19,7 @@ if (isset($_POST['create'])) {
         exit();
     }
     // Update de l'target
-    $stmt = $con->prepare("UPDATE  targets SET name=?, firstname=?, nationality=?, birthdate=? WHERE id = $idUpdate");
+    $stmt = $con->prepare("UPDATE Targets SET name=?, firstname=?, nationality=?, birthdate=? WHERE id = $idUpdate");
     $stmt->execute([$name, $firstname, $pays, $date]);
     if ($stmt) {
         $_SESSION['message'] = " Target modifié avec succès !"; //stocke le message dans une variable de session
@@ -81,7 +81,7 @@ if (isset($_POST['create'])) {
             'Russie',
             'Suisse'
           );
-        $query = "SELECT * FROM targets WHERE id = :id";
+        $query = "SELECT * FROM Targets WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -137,7 +137,7 @@ if (isset($_POST['create'])) {
                 // On récupère le nombre d'targets par page
                 $entityByPage = 3;
                 // On récupère le nombre total d'targets
-                $entityTotalReq = $con->query('SELECT id FROM targets');
+                $entityTotalReq = $con->query('SELECT id FROM Targets');
                 // On calcule le nombre de pages total
                 $entityTotal = $entityTotalReq->rowCount();
                 // On arrondit au nombre supérieur le nombre de pages
@@ -166,7 +166,7 @@ if (isset($_POST['create'])) {
                 <div class="card-deck">
                     <?php
                     // On récupère les targets
-                    $targets = $con->query('SELECT * FROM targets ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    $targets = $con->query('SELECT * FROM Targets ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                     // On affiche chaque entrée une à une
                     while ($target = $targets->fetch()) {
                         $date = new DateTime($target['birthdate']);

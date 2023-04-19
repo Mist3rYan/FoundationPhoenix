@@ -1,6 +1,6 @@
 <?php
 session_start(); //démarre la session
-require_once ('fonctions/variablesConnexion.php'); 
+require_once ('fonctions/installDatabase.php');
 ?>
 
 <!DOCTYPE html>

@@ -22,7 +22,7 @@ if (isset($_POST['create'])) {
   }
 
   // Vérifie si le nom d'utilisateur existe déjà
-  $stmt = $con->prepare("SELECT * FROM targets WHERE code=?");
+  $stmt = $con->prepare("SELECT * FROM Targets WHERE code=?");
   $stmt->execute([$code]);
   $codeSearch = $stmt->fetch();
   if ($codeSearch) {
@@ -30,7 +30,7 @@ if (isset($_POST['create'])) {
     $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   } else {
     // le nom d'utilisateur n'existe pas
-    $stmt = $con->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $con->prepare("INSERT INTO Targets (code, name, firstname, nationality, birthdate) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$code, $name, $firstname, $pays, $date]);
     if ($stmt) {
       $_SESSION['message'] = " Target créé avec succès !"; //stocke le message dans une variable de session

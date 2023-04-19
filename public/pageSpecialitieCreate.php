@@ -8,7 +8,7 @@ if (isset($_POST['create'])) {
     $name = $_POST['name'];
 
     // Vérifie si le nom d'utilisateur existe déjà
-    $stmt = $con->prepare("SELECT * FROM specialities WHERE name=?");
+    $stmt = $con->prepare("SELECT * FROM Specialities WHERE name=?");
     $stmt->execute([$name]);
     $codeSearch = $stmt->fetch();
     if ($codeSearch) {
@@ -16,7 +16,7 @@ if (isset($_POST['create'])) {
         $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
     } else {
         // le nom d'utilisateur n'existe pas
-        $stmt = $con->prepare("INSERT INTO specialities (name) VALUES (?)");
+        $stmt = $con->prepare("INSERT INTO Specialities (name) VALUES (?)");
         $stmt->execute([$name]);
         if ($stmt) {
             $_SESSION['message'] = " Spécialité créé avec succès !"; //stocke le message dans une variable de session

@@ -20,7 +20,7 @@ if (isset($_POST['create'])) {
   }
 
   // Vérifie si le nom d'utilisateur existe déjà
-  $stmt = $con->prepare("SELECT * FROM hideouts WHERE code=?");
+  $stmt = $con->prepare("SELECT * FROM Hideouts WHERE code=?");
   $stmt->execute([$code]);
   $codeSearch = $stmt->fetch();
   if ($codeSearch) {
@@ -28,7 +28,7 @@ if (isset($_POST['create'])) {
     $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   } else {
     // le nom d'utilisateur n'existe pas
-    $stmt = $con->prepare("INSERT INTO hideouts (code, type, address, country) VALUES (?, ?, ?, ?)");
+    $stmt = $con->prepare("INSERT INTO Hideouts (code, type, address, country) VALUES (?, ?, ?, ?)");
     $stmt->execute([$code, $type, $address, $pays]);
     if ($stmt) {
       $_SESSION['message'] = " Hideout créé avec succès !"; //stocke le message dans une variable de session

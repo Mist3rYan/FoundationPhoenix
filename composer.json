@@ -15,6 +15,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "fakerphp/faker": "^1.21"
+        "fakerphp/faker": "^1.21",
+        "php": "^8.0"
     }
 }

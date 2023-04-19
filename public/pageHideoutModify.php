@@ -18,7 +18,7 @@ if (isset($_POST['create'])) {
         exit();
     }
     // Update de Hideout
-    $stmt = $con->prepare("UPDATE  hideouts SET type=?, address=?, country=? WHERE id = $idUpdate");
+    $stmt = $con->prepare("UPDATE  Hideouts SET type=?, address=?, country=? WHERE id = $idUpdate");
     $stmt->execute([$type, $address, $pays]);
     if ($stmt) {
         $_SESSION['message'] = " Hideout modifié avec succès !"; //stocke le message dans une variable de session
@@ -80,7 +80,7 @@ if (isset($_POST['create'])) {
             'Russie',
             'Suisse'
           );
-        $query = "SELECT * FROM hideouts WHERE id = :id";
+        $query = "SELECT * FROM Hideouts WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -130,7 +130,7 @@ if (isset($_POST['create'])) {
                 // On récupère le nombre hideout par page
                 $entityByPage = 3;
                 // On récupère le nombre total de hideout
-                $entityTotalReq = $con->query('SELECT id FROM hideouts');
+                $entityTotalReq = $con->query('SELECT id FROM Hideouts');
                 // On calcule le nombre de pages total
                 $entityTotal = $entityTotalReq->rowCount();
                 // On arrondit au nombre supérieur le nombre de pages
@@ -159,7 +159,7 @@ if (isset($_POST['create'])) {
             <div class="card-deck">
                 <?php
                 // On récupère les hideouts
-                $hideouts = $con->query('SELECT * FROM hideouts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                $hideouts = $con->query('SELECT * FROM Hideouts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                 // On affiche chaque entrée une à une
                 while ($hideout = $hideouts->fetch()) {
                 ?>

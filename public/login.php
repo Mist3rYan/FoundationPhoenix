@@ -4,7 +4,7 @@ require_once('fonctions/connect.php');
 // Validation du formulaire
 if (isset($_POST['email']) &&  isset($_POST['password'])) {
 
-    $query = "SELECT * FROM users WHERE email = :email AND password = :password";  
+    $query = "SELECT * FROM Users WHERE email = :email AND password = :password";  
     $statement = $con->prepare($query);
     $statement->execute(
         array(

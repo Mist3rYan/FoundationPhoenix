@@ -19,7 +19,7 @@ if (isset($_POST['create'])) {
         exit();
     }
     // Update de contact 
-    $stmt = $con->prepare("UPDATE  contacts SET name=?, firstname=?, nationality=?, birthdate=? WHERE id = $idUpdate");
+    $stmt = $con->prepare("UPDATE Contacts SET name=?, firstname=?, nationality=?, birthdate=? WHERE id = $idUpdate");
     $stmt->execute([$name, $firstname, $pays, $date]);
     if ($stmt) {
         $_SESSION['message'] = " Contact modifié avec succès !"; //stocke le message dans une variable de session
@@ -81,7 +81,7 @@ if (isset($_POST['create'])) {
             'Russie',
             'Suisse'
           );
-        $query = "SELECT * FROM contacts WHERE id = :id";
+        $query = "SELECT * FROM Contacts WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -137,7 +137,7 @@ if (isset($_POST['create'])) {
                 // On récupère le nombre de contact par page
                 $entityByPage = 3;
                 // On récupère le nombre total de contact
-                $entityTotalReq = $con->query('SELECT id FROM contacts');
+                $entityTotalReq = $con->query('SELECT id FROM Contacts');
                 // On calcule le nombre de pages total
                 $entityTotal = $entityTotalReq->rowCount();
                 // On arrondit au nombre supérieur le nombre de pages
@@ -166,7 +166,7 @@ if (isset($_POST['create'])) {
                 <div class="card-deck">
                     <?php
                     // On récupère les contacts
-                    $contacts = $con->query('SELECT * FROM contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    $contacts = $con->query('SELECT * FROM Contacts ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                     // On affiche chaque entrée une à une
                     while ($contact = $contacts->fetch()) {
                         $date = new DateTime($contact['birthdate']);

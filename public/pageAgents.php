@@ -25,7 +25,7 @@ require_once('fonctions/connect.php');
   // On récupère le nombre d'agents par page
   $entityByPage = 3;
   // On récupère le nombre total d'agents
-  $entityTotalReq = $con->query('SELECT id FROM agents');
+  $entityTotalReq = $con->query('SELECT id FROM Agents');
   // On calcule le nombre de pages total
   $entityTotal = $entityTotalReq->rowCount();
   // On arrondit au nombre supérieur le nombre de pages
@@ -54,7 +54,7 @@ require_once('fonctions/connect.php');
       <div class="card-deck">
         <?php
         // On récupère les agents
-        $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+        $agents = $con->query('SELECT * FROM Agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
         // On affiche chaque entrée une à une
         while ($agent = $agents->fetch()) {
           $array = $agent['speciality'];

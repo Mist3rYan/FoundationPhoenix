@@ -3,7 +3,7 @@ session_start(); //démarre la session
 require_once('fonctions/connect.php');
 // Spécialités
 $stack = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
     array_push($stack, $specialitie['name']);
 }
@@ -40,7 +40,7 @@ if (isset($_POST['create'])) {
         exit();
     }
     // Update de l'agent
-    $stmt = $con->prepare("UPDATE  agents SET name=?, firstname=?, nationality=?, speciality=?, birthdate=? WHERE id = $idUpdate");
+    $stmt = $con->prepare("UPDATE  Agents SET name=?, firstname=?, nationality=?, speciality=?, birthdate=? WHERE id = $idUpdate");
     $stmt->execute([$name, $firstname, $pays, $specialite, $date]);
     if ($stmt) {
         $_SESSION['message'] = " Agent modifié avec succès !"; //stocke le message dans une variable de session
@@ -102,7 +102,7 @@ if (isset($_POST['create'])) {
             'Russie',
             'Suisse'
           );
-        $query = "SELECT * FROM agents WHERE id = :id";
+        $query = "SELECT * FROM Agents WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -183,7 +183,7 @@ if (isset($_POST['create'])) {
                 // On récupère le nombre d'agents par page
                 $entityByPage = 3;
                 // On récupère le nombre total d'agents
-                $entityTotalReq = $con->query('SELECT id FROM agents');
+                $entityTotalReq = $con->query('SELECT id FROM Agents');
                 // On calcule le nombre de pages total
                 $entityTotal = $entityTotalReq->rowCount();
                 // On arrondit au nombre supérieur le nombre de pages
@@ -212,7 +212,7 @@ if (isset($_POST['create'])) {
                 <div class="card-deck">
                     <?php
                     // On récupère les agents
-                    $agents = $con->query('SELECT * FROM agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    $agents = $con->query('SELECT * FROM Agents ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                     // On affiche chaque entrée une à une
                     while ($agent = $agents->fetch()) {
                         $array = $agent['speciality'];

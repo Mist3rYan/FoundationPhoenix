@@ -3,7 +3,7 @@ session_start(); //démarre la session
 require_once('fonctions/connect.php'); //charge la connexion à la base de données
 // Spécialités
 $stack = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
   array_push($stack, $specialitie['name']);
 }
@@ -37,7 +37,7 @@ if (isset($_POST['create'])) {
     exit();
   }
   // Vérifie si le nom d'utilisateur existe déjà
-  $stmt = $con->prepare("SELECT * FROM agents WHERE code=?");
+  $stmt = $con->prepare("SELECT * FROM Agents WHERE code=?");
   $stmt->execute([$code]);
   $codeSearch = $stmt->fetch();
   if ($codeSearch) {
@@ -45,7 +45,7 @@ if (isset($_POST['create'])) {
     $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   } else {
     // le nom d'utilisateur n'existe pas
-    $stmt = $con->prepare("INSERT INTO agents (code, name, firstname, nationality, speciality, birthdate) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $con->prepare("INSERT INTO Agents (code, name, firstname, nationality, speciality, birthdate) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$code, $name, $firstname, $pays, $specialite, $date]);
     if ($stmt) {
       $_SESSION['message'] = " Agent créé avec succès !"; //stocke le message dans une variable de session

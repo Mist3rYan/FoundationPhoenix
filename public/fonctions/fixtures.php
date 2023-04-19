@@ -1,11 +1,24 @@
 <?php
 session_start(); //démarre la session
-require_once('../fonctions/installDatabase.php'); //charge la connexion à la base de données
 require_once('../../vendor/autoload.php'); //charge les dépendances
-require_once('../Models/agent.php'); //charge les fonctions liées aux agents
+require_once('../Models/Agent.php'); //charge les fonctions liées aux agents
 require_once('../Models/Speciality.php'); //charge les fonctions liées aux spécialités
 require_once('../Models/Hideout.php'); //charge les fonctions liées aux planques
 
+define('DBHOST', 'sql202.epizy.com');
+define('DBUSER', 'epiz_34039178');
+define('DBNAME', 'epiz_34039178_foundation_phoenix');
+define('PORT', '3306');
+define('PASSWORD', 'jA2qLkGuWhEFx');
+
+$servername = DBHOST;
+$username = DBUSER;
+$password = PASSWORD;
+$dbname = DBNAME;
+$port = PORT;
+
+$dbco = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+$dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // On crée une instance de Faker en FR
 $faker = Faker\Factory::create('fr_FR');
 
@@ -14,9 +27,9 @@ $specialities = array(
     'Concentration',
     'Cryptologie',
     'Diplomatie',
-    'Droit', 
-    'Finance', 
-    'Infiltration', 
+    'Droit',
+    'Finance',
+    'Infiltration',
     'Medecine',
     'Renseignement',
     'Securite',
@@ -53,38 +66,50 @@ $country = array(
     'Equateur'
 );
 
+// User
+$sql = " INSERT INTO
+Users(name, firstname, email, password, createdAt)
+values
+(
+    'Thornton',
+    'Peter',
+    'peter.thornton@foundationphoenix.org',
+    'admin',
+    Now()
+)";
+$dbco->exec($sql);
 
 //Specialities
 $speciality = new Speciality();
 foreach ($specialities as $specialitie) {
     $speciality->setName($specialitie);
     // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO specialities (name) VALUES (?)");
-    $req->execute(array(
-        $speciality->getName()
-    ));
+    $sql = "INSERT INTO 
+    Specialities (name) 
+    values ('" . $speciality->getName() . "'
+    )";
+    $dbco->exec($sql);;
 }
-
-
 //Agents
 $agent = new Agent();
-
 // On insère un agent manuellement pour faire un exemple mission
 $agent->setCode("DXSID N°XC4479");
 $agent->setName("MacGyver");
 $agent->setFirstname("Angus");
 $agent->setNationality('Etats-Unis');
 $agent->setBirthdate("1951-03-23");
-$agent->setSpeciality(["Renseignement","Diplomatie","Concentration","Securite"]);
-$req = $dbco->prepare("INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) VALUES (?,?,?,?,?,?)");
-$req->execute(array(
-    $agent->getCode(),
-    $agent->getName(),
-    $agent->getFirstname(),
-    $agent->getNationality(),
-    date($agent->getBirthdate()),
-    json_encode($agent->getSpeciality())
-));
+$agent->setSpeciality(["Renseignement", "Diplomatie", "Concentration", "Securite"]);
+$sql = "INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) 
+VALUES (
+    '" . $agent->getCode() . "',
+    '" . $agent->getName() . "',
+    '" . $agent->getFirstname() . "',
+    '" . $agent->getNationality() . "',
+    '" . date($agent->getBirthdate()) . "',
+    '" . json_encode($agent->getSpeciality()) . "'
+)";
+$dbco->exec($sql);
+
 
 $nbAgents = 20;
 for ($i = 0; $i < $nbAgents; $i++) {
@@ -110,15 +135,16 @@ for ($i = 0; $i < $nbAgents; $i++) {
     $agent->setSpeciality($listeSpecialities);
 
     // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) VALUES (?,?,?,?,?,?)");
-    $req->execute(array(
-        $agent->getCode(),
-        $agent->getName(),
-        $agent->getFirstname(),
-        $agent->getNationality(),
-        $agent->getBirthdate(),
-        json_encode($agent->getSpeciality())
-    ));
+    $sql = "INSERT INTO Agents (code, name, firstname, nationality, birthdate, speciality) 
+    VALUES (
+        '" . $agent->getCode() . "',
+        '" . $agent->getName() . "',
+        '" . $agent->getFirstname() . "',
+        '" . $agent->getNationality() . "',
+        '" . date($agent->getBirthdate()) . "',
+        '" . json_encode($agent->getSpeciality()) . "'
+    )";
+    $dbco->exec($sql);
 }
 
 //Contacts
@@ -129,14 +155,15 @@ $contact->setName("Dalton");
 $contact->setFirstname("Jack");
 $contact->setNationality('Etats-Unis');
 $contact->setBirthdate("1951-02-03");
-$req = $dbco->prepare("INSERT INTO contacts (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
-$req->execute(array(
-    $contact->getCode(),
-    $contact->getName(),
-    $contact->getFirstname(),
-    $contact->getNationality(),
-    $contact->getBirthdate()
-));
+$sql = "INSERT INTO Contacts (code, name, firstname, nationality, birthdate) 
+VALUES (
+    '" . $contact->getCode() . "',
+    '" . $contact->getName() . "',
+    '" . $contact->getFirstname() . "',
+    '" . $contact->getNationality() . "',
+    '" . $contact->getBirthdate() . "'
+    )";
+$dbco->exec($sql);
 
 $nbContact = 20;
 for ($i = 0; $i < $nbContact; $i++) {
@@ -153,14 +180,15 @@ for ($i = 0; $i < $nbContact; $i++) {
     $contact->setBirthdate($date->format('Y-m-d'));
 
     // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO contacts (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
-    $req->execute(array(
-        $contact->getCode(),
-        $contact->getName(),
-        $contact->getFirstname(),
-        $contact->getNationality(),
-        date($contact->getBirthdate())
-    ));
+    $sql = "INSERT INTO Contacts (code, name, firstname, nationality, birthdate) 
+    VALUES (
+        '" . $contact->getCode() . "',
+        '" . $contact->getName() . "',
+        '" . $contact->getFirstname() . "',
+        '" . $contact->getNationality() . "',
+        '" . $contact->getBirthdate() . "'
+        )";
+    $dbco->exec($sql);
 }
 
 //Targets
@@ -172,14 +200,15 @@ $target->setFirstname("Francis");
 $target->setNationality('France');
 $target->setBirthdate("2002-02-15");
 
-$req = $dbco->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
-$req->execute(array(
-    $target->getCode(),
-    $target->getName(),
-    $target->getFirstname(),
-    $target->getNationality(),
-    $target->getBirthdate()
-));
+$sql = "INSERT INTO Targets (code, name, firstname, nationality, birthdate) 
+VALUES (
+    '" . $target->getCode() . "',
+    '" . $target->getName() . "',
+    '" . $target->getFirstname() . "',
+    '" . $target->getNationality() . "',
+    '" . $target->getBirthdate() . "'
+    )";
+$dbco->exec($sql);
 
 $nbTarget = 20;
 for ($i = 0; $i < $nbTarget; $i++) {
@@ -195,14 +224,15 @@ for ($i = 0; $i < $nbTarget; $i++) {
     $target->setBirthdate($date->format('Y-m-d'));
 
     // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO targets (code, name, firstname, nationality, birthdate) VALUES (?,?,?,?,?)");
-    $req->execute(array(
-        $target->getCode(),
-        $target->getName(),
-        $target->getFirstname(),
-        $target->getNationality(),
-        date($target->getBirthdate())
-    ));
+    $sql = "INSERT INTO Targets (code, name, firstname, nationality, birthdate) 
+    VALUES (
+        '" . $target->getCode() . "',
+        '" . $target->getName() . "',
+        '" . $target->getFirstname() . "',
+        '" . $target->getNationality() . "',
+        '" . $target->getBirthdate() . "'
+        )";
+    $dbco->exec($sql);
 }
 
 //Hideouts
@@ -217,25 +247,15 @@ for ($i = 0; $i < $nbHideout; $i++) {
     $hideout->setCode($faker->numberBetween(1, 10000));
     $hideout->setType($faker->randomElement($array = array('Villa', 'Maison', 'Appartement', 'Bunker', 'Hangar', 'Cave', 'Bateau')));
     // On insère les données dans la base de données
-    $req = $dbco->prepare("INSERT INTO hideouts (code, address, country, type) VALUES (?,?,?,?)");
-    $req->execute(array(
-        $hideout->getCode(),
-        $hideout->getAddress(),
-        $hideout->getCountry(),
-        $hideout->getType()
-    ));
+    $sql = "INSERT INTO Hideouts (code, address, country, type) 
+    VALUES (
+        '" . $hideout->getCode() . "',
+        '" . $hideout->getAddress() . "',
+        '" . $hideout->getCountry() . "',
+        '" . $hideout->getType() . "'
+        )";
+    $dbco->exec($sql);
 }
-$sql = " INSERT INTO
-Users(name, firstname, email, password, createdAt)
-values
-(
-    'Thornton',
-    'Peter',
-    'peter.thornton@foundationphoenix.org',
-    'admin',
-    Now()
-)";
-$dbco->exec($sql);
 
 $sql = " INSERT INTO
         Missions(titre, description, nom_de_code, country, type_mission, status, date_debut, date_fin, specialitie_id)
@@ -253,15 +273,21 @@ $sql = " INSERT INTO
         )";
 $dbco->exec($sql);
 
-$missionID = 1;
+$sql= "SET FOREIGN_KEY_CHECKS=0";
+$dbco->exec($sql);
+$sql = "INSERT INTO Agents_has_Missions (mission_id, agent_id)
+ VALUES ('1', '1')";
+$dbco->exec($sql);
 
-$stmt = $dbco->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
-$stmt->execute([$missionID, 1]);
-$stmt = $dbco->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
-$stmt->execute([$missionID, 1]);
-$stmt = $dbco->prepare("INSERT INTO cibles_has_missions (mission_id, cible_id) VALUES (?, ?)");
-$stmt->execute([$missionID, 1]);
-
+$sql = "INSERT INTO Contacts_has_Missions (mission_id, contact_id) 
+ VALUES ('1', '1')";
+$dbco->exec($sql);
+$sql = "INSERT INTO Cibles_has_Missions (mission_id, cible_id) 
+ VALUES ('1', '1')";
+$dbco->exec($sql);
+$sql= "SET FOREIGN_KEY_CHECKS=1";
+$dbco->exec($sql);
+$dbco = null;
 
 
 $_SESSION['message'] = "Les données ont bien été ajoutées !"; //stocke le message dans une variable de session

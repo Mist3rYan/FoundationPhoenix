@@ -32,11 +32,11 @@ if ($table == 'missions') {
 }
 
 if ($table == 'agents') {
-    $query = "SELECT * FROM agents_has_missions WHERE mission_id = :id";
+    $query = "SELECT * FROM Agents_has_Missions WHERE mission_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
-        $sql = "DELETE FROM missions WHERE `id` = :id";
+        $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer
@@ -85,11 +85,11 @@ if ($table == 'hideouts') {
     }
 }
 if ($table == 'targets') {
-    $query = "SELECT * FROM targets_has_missions WHERE mission_id = :id";
+    $query = "SELECT * FROM Targets_has_Missions WHERE mission_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
-        $sql = "DELETE FROM missions WHERE `id` = :id";
+        $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer
@@ -112,11 +112,11 @@ if ($table == 'targets') {
     }
 }
 if ($table == 'contacts') {
-    $query = "SELECT * FROM contacts_has_missions WHERE mission_id = :id";
+    $query = "SELECT * FROM Contacts_has_Missions WHERE mission_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
-        $sql = "DELETE FROM missions WHERE `id` = :id";
+        $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer

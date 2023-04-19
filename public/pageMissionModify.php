@@ -5,7 +5,7 @@ require_once('fonctions/connect.php');
 // Spécialités
 $stacks = [];
 $stackIds = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
     array_push($stacks, $specialitie['name']);
     array_push($stackIds, $specialitie['id']);
@@ -17,7 +17,7 @@ $stackAgents = [];
 $stackAgentCountrys = [];
 $stackAgentIds = [];
 $stackAgentSpecs = [];
-$agents = $con->query('SELECT * FROM agents ORDER BY id');
+$agents = $con->query('SELECT * FROM Agents ORDER BY id');
 while ($agent = $agents->fetch()) {
     array_push($stackAgents, $agent['code']);
     array_push($stackAgentCountrys, $agent['nationality']);
@@ -30,7 +30,7 @@ $agents->closeCursor(); // Termine le traitement de la requête
 $stackTargets = [];
 $stackTargetCountrys = [];
 $stackTargetIds = [];
-$targets = $con->query('SELECT * FROM targets ORDER BY id');
+$targets = $con->query('SELECT * FROM Targets ORDER BY id');
 while ($target = $targets->fetch()) {
     array_push($stackTargets, $target['code']);
     array_push($stackTargetCountrys, $target['nationality']);
@@ -42,7 +42,7 @@ $targets->closeCursor(); // Termine le traitement de la requête
 $stackContacts = [];
 $stackContactCountrys = [];
 $stackContactIds = [];
-$contacts = $con->query('SELECT * FROM contacts ORDER BY id');
+$contacts = $con->query('SELECT * FROM Contacts ORDER BY id');
 while ($contact = $contacts->fetch()) {
     array_push($stackContacts, $contact['code']);
     array_push($stackContactCountrys, $contact['nationality']);
@@ -53,7 +53,7 @@ $contacts->closeCursor(); // Termine le traitement de la requête
 $stackHideouts = [];
 $stackHideoutCountrys = [];
 $stackHideoutIds = [];
-$hideouts = $con->query('SELECT * FROM hideouts ORDER BY id');
+$hideouts = $con->query('SELECT * FROM Hideouts ORDER BY id');
 while ($hideout = $hideouts->fetch()) {
     array_push($stackHideouts, $hideout['type']);
     array_push($stackHideoutCountrys, $hideout['country']);
@@ -99,7 +99,7 @@ if (isset($_POST['update'])) {
     if (!empty($_POST['agent'])) {
         $agentListeIds = $_POST['agent'];
         for ($i = 0; $i < count($agentListeIds); $i++) {
-            $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+            $stmt = $con->prepare("SELECT * FROM Agents WHERE id=?");
             $stmt->execute([$agentListeIds[$i]]);
             $agent = $stmt->fetch();
             $transforme = explode(',', $agent['speciality']);
@@ -147,7 +147,7 @@ if (isset($_POST['update'])) {
 
     if (($_POST['specialitie_requ']) !== 'Spécialité requise...') {
         $specialitieRequ = $_POST['specialitie_requ'];
-        $stmt = $con->prepare("SELECT * FROM specialities WHERE id=?");
+        $stmt = $con->prepare("SELECT * FROM Specialities WHERE id=?");
         $stmt->execute([$specialitieRequ]);
         $specialitieRequ = $stmt->fetch();
         $item = $specialitieRequ['name'];
@@ -173,14 +173,14 @@ if (isset($_POST['update'])) {
     }
 
     // le nom d'utilisateur n'existe pas
-    $stmt = $con->prepare("UPDATE missions SET titre=?, description=?, nom_de_code=?, country=?, type_mission=?, status=?, date_debut=?, date_fin=?,specialitie_id=? WHERE id=?");
+    $stmt = $con->prepare("UPDATE Missions SET titre=?, description=?, nom_de_code=?, country=?, type_mission=?, status=?, date_debut=?, date_fin=?,specialitie_id=? WHERE id=?");
     $stmt->execute([$titre, $description, $nomDeCode, $pays, $typeDeMission, $status, $dateDebut, $dateFin, $specialitieRequ['id'], $idMission]);
 
     if ($stmt) {
         $_SESSION['message'] = " Mission mise à jour avec succès !"; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
 
-        $sql = "DELETE FROM agents_has_missions WHERE `mission_id` = :id";
+        $sql = "DELETE FROM Agents_has_Missions WHERE `mission_id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer
@@ -191,16 +191,16 @@ if (isset($_POST['update'])) {
         $res = $stmt->execute();
         $agentListeIds = $_POST['agent'];
         for ($i = 0; $i < count($agentListeIds); $i++) {
-            $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+            $stmt = $con->prepare("SELECT * FROM Agents WHERE id=?");
             $stmt->execute([$agentListeIds[$i]]);
             $agent = $stmt->fetch();
-            $stmt = $con->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
+            $stmt = $con->prepare("INSERT INTO Agents_has_Missions (mission_id, agent_id) VALUES (?, ?)");
             $stmt->execute([$idMission, $agent['id']]);
         }
 
         if ($hideoutListeIds != '') {
 
-            $sql = "DELETE FROM hideouts_has_missions WHERE `mission_id` = :id";
+            $sql = "DELETE FROM Hideouts_has_Missions WHERE `mission_id` = :id";
             //Préparez notre déclaration DELETE
             $stmt = $con->prepare($sql);
             // id de la ligne à supprimer
@@ -211,15 +211,15 @@ if (isset($_POST['update'])) {
             $res = $stmt->execute();
 
             for ($i = 0; $i < count($hideoutListeIds); $i++) {
-                $stmt = $con->prepare("SELECT * FROM hideouts WHERE id=?");
+                $stmt = $con->prepare("SELECT * FROM Hideouts WHERE id=?");
                 $stmt->execute([$hideoutListeIds[$i]]);
                 $hideout = $stmt->fetch();
-                $stmt = $con->prepare("INSERT INTO hideouts_has_missions (mission_id, hideouts_id) VALUES (?, ?)");
+                $stmt = $con->prepare("INSERT INTO Hideouts_has_Missions (mission_id, hideouts_id) VALUES (?, ?)");
                 $stmt->execute([$idMission, $hideout['id']]);
             }
         }
 
-        $sql = "DELETE FROM contacts_has_missions WHERE `mission_id` = :id";
+        $sql = "DELETE FROM Contacts_has_Missions WHERE `mission_id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer
@@ -230,14 +230,14 @@ if (isset($_POST['update'])) {
         $res = $stmt->execute();
 
         for ($i = 0; $i < count($contactListeIds); $i++) {
-            $stmt = $con->prepare("SELECT * FROM contacts WHERE id=?");
+            $stmt = $con->prepare("SELECT * FROM Contacts WHERE id=?");
             $stmt->execute([$contactListeIds[$i]]);
             $contact = $stmt->fetch();
-            $stmt = $con->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
+            $stmt = $con->prepare("INSERT INTO Contacts_has_Missions (mission_id, contact_id) VALUES (?, ?)");
             $stmt->execute([$idMission, $contact['id']]);
         }
         
-        $sql = "DELETE FROM cibles_has_missions WHERE `mission_id` = :id";
+        $sql = "DELETE FROM Cibles_has_Missions WHERE `mission_id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
         // id de la ligne à supprimer
@@ -247,10 +247,10 @@ if (isset($_POST['update'])) {
         //Exécuter notre instruction DELETE
         $res = $stmt->execute();
         for ($i = 0; $i < count($targetListeIds); $i++) {
-            $stmt = $con->prepare("SELECT * FROM targets WHERE id=?");
+            $stmt = $con->prepare("SELECT * FROM Targets WHERE id=?");
             $stmt->execute([$targetListeIds[$i]]);
             $target = $stmt->fetch();
-            $stmt = $con->prepare("INSERT INTO cibles_has_missions (mission_id, cible_id) VALUES (?, ?)");
+            $stmt = $con->prepare("INSERT INTO Cibles_has_Missions (mission_id, cible_id) VALUES (?, ?)");
             $stmt->execute([$idMission, $target['id']]);
         }
 
@@ -283,7 +283,7 @@ if (isset($_POST['update'])) {
     <?php include '_partials/_messages.php'; ?>
     <?php
     if (isset($_GET['id']) and !empty($_GET['id'])) {
-        $query = "SELECT * FROM missions WHERE id = :id";
+        $query = "SELECT * FROM Missions WHERE id = :id";
         $statement = $con->prepare($query);
         $statement->execute(
             array(
@@ -394,7 +394,7 @@ if (isset($_POST['update'])) {
                         <label for="contact" class="form-label">Contacts *</label>
                         <select multiple id="contact" name="contact[]" class="form-control" required>
                             <?php
-                            $query = "SELECT * FROM contacts_has_missions WHERE mission_id = :id";
+                            $query = "SELECT * FROM Contacts_has_Missions WHERE mission_id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
@@ -402,7 +402,7 @@ if (isset($_POST['update'])) {
                                 )
                             );
                             while ($contactId = $statement->fetch(PDO::FETCH_ASSOC)) {
-                                $queryContact = "SELECT * FROM contacts WHERE id = :id";
+                                $queryContact = "SELECT * FROM Contacts WHERE id = :id";
                                 $statementContact = $con->prepare($queryContact);
                                 $statementContact->execute(
                                     array(
@@ -426,7 +426,7 @@ if (isset($_POST['update'])) {
                         <label for="hideout" class="form-label">Hideouts</label>
                         <select multiple id="hideout" name="hideout[]" class="form-control">
                             <?php
-                            $query = "SELECT * FROM hideouts_has_missions WHERE mission_id = :id";
+                            $query = "SELECT * FROM Hideouts_has_Missions WHERE mission_id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
@@ -435,7 +435,7 @@ if (isset($_POST['update'])) {
                             );
                             if ($statement->rowCount() > 0) {
                                 while ($hideoutId = $statement->fetch(PDO::FETCH_ASSOC)) {
-                                    $queryHideout = "SELECT * FROM hideouts WHERE id = :id";
+                                    $queryHideout = "SELECT * FROM Hideouts WHERE id = :id";
                                     $statementHideout = $con->prepare($queryHideout);
                                     $statementHideout->execute(
                                         array(
@@ -487,7 +487,7 @@ if (isset($_POST['update'])) {
                         <label for="target" class="form-label">Targets *</label>
                         <select multiple id="target" name="target[]" class="form-control" onChange="filtreAgents();" required>
                             <?php
-                            $query = "SELECT * FROM cibles_has_missions WHERE mission_id = :id";
+                            $query = "SELECT * FROM Cibles_has_Missions WHERE mission_id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
@@ -495,7 +495,7 @@ if (isset($_POST['update'])) {
                                 )
                             );
                             while ($cibleId = $statement->fetch(PDO::FETCH_ASSOC)) {
-                                $queryCible = "SELECT * FROM targets WHERE id = :id";
+                                $queryCible = "SELECT * FROM Targets WHERE id = :id";
                                 $statementCible = $con->prepare($queryCible);
                                 $statementCible->execute(
                                     array(
@@ -520,7 +520,7 @@ if (isset($_POST['update'])) {
                         <select id="specialitie_requ" name="specialitie_requ" class="form-control" required>
                             <option selected>Spécialité requise...</option>
                             <?php
-                            $query = "SELECT * FROM specialities WHERE id = :id";
+                            $query = "SELECT * FROM Specialities WHERE id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
@@ -548,7 +548,7 @@ if (isset($_POST['update'])) {
                         <label for="agent" class="form-label">Agents *</label>
                         <select multiple id="agent" name="agent[]" class="form-control" required>
                             <?php
-                            $query = "SELECT * FROM agents_has_missions WHERE mission_id = :id";
+                            $query = "SELECT * FROM Agents_has_Missions WHERE mission_id = :id";
                             $statement = $con->prepare($query);
                             $statement->execute(
                                 array(
@@ -556,7 +556,7 @@ if (isset($_POST['update'])) {
                                 )
                             );
                             while ($agentId = $statement->fetch(PDO::FETCH_ASSOC)) {
-                                $queryAgent = "SELECT * FROM agents WHERE id = :id";
+                                $queryAgent = "SELECT * FROM Agents WHERE id = :id";
                                 $statementAgent = $con->prepare($queryAgent);
                                 $statementAgent->execute(
                                     array(
@@ -589,7 +589,7 @@ if (isset($_POST['update'])) {
         // On récupère le nombre d'agents par page
         $entityByPage = 3;
         // On récupère le nombre total d'agents
-        $entityTotalReq = $con->query('SELECT id FROM missions');
+        $entityTotalReq = $con->query('SELECT id FROM Missions');
         // On calcule le nombre de pages total
         $entityTotal = $entityTotalReq->rowCount();
         // On arrondit au nombre supérieur le nombre de pages
@@ -618,7 +618,7 @@ if (isset($_POST['update'])) {
                 <div class="card-deck">
                     <?php
                     // On récupère les agents
-                    $missions = $con->query('SELECT * FROM missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+                    $missions = $con->query('SELECT * FROM Missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
                     // On affiche chaque entrée une à une
                     while ($mission = $missions->fetch()) {
                     ?>

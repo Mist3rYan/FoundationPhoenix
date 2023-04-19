@@ -3,7 +3,7 @@ session_start(); //démarre la session
 require_once('fonctions/connect.php');
 // Spécialités
 $stack = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
   array_push($stack, $specialitie['name']);
 }
@@ -32,7 +32,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
     // On récupère le nombre d'agents par page
     $entityByPage = 3;
     // On récupère le nombre total d'agents
-    $entityTotalReq = $con->query('SELECT id FROM missions');
+    $entityTotalReq = $con->query('SELECT id FROM Missions');
     // On calcule le nombre de pages total
     $entityTotal = $entityTotalReq->rowCount();
     // On arrondit au nombre supérieur le nombre de pages
@@ -61,7 +61,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
         <div class="card-deck">
           <?php
           // On récupère les agents
-          $missions = $con->query('SELECT * FROM missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
+          $missions = $con->query('SELECT * FROM Missions ORDER BY id DESC LIMIT ' . $start . ',' . $entityByPage);
           // On affiche chaque entrée une à une
           while ($mission = $missions->fetch()) {
           ?>

@@ -5,7 +5,7 @@ require_once('fonctions/connect.php'); //charge la connexion à la base de donn�
 // Spécialités
 $stacks = [];
 $stackIds = [];
-$specialities = $con->query('SELECT * FROM specialities ORDER BY id');
+$specialities = $con->query('SELECT * FROM Specialities ORDER BY id');
 while ($specialitie = $specialities->fetch()) {
   array_push($stacks, $specialitie['name']);
   array_push($stackIds, $specialitie['id']);
@@ -16,7 +16,7 @@ $stackAgents = [];
 $stackAgentCountrys = [];
 $stackAgentIds = [];
 $stackAgentSpecs = [];
-$agents = $con->query('SELECT * FROM agents ORDER BY id');
+$agents = $con->query('SELECT * FROM Agents ORDER BY id');
 while ($agent = $agents->fetch()) {
   array_push($stackAgents, $agent['code']);
   array_push($stackAgentCountrys, $agent['nationality']);
@@ -28,7 +28,7 @@ $agents->closeCursor(); // Termine le traitement de la requête
 $stackTargets = [];
 $stackTargetCountrys = [];
 $stackTargetIds = [];
-$targets = $con->query('SELECT * FROM targets ORDER BY id');
+$targets = $con->query('SELECT * FROM Targets ORDER BY id');
 while ($target = $targets->fetch()) {
   array_push($stackTargets, $target['code']);
   array_push($stackTargetCountrys, $target['nationality']);
@@ -39,7 +39,7 @@ $targets->closeCursor(); // Termine le traitement de la requête
 $stackContacts = [];
 $stackContactCountrys = [];
 $stackContactIds = [];
-$contacts = $con->query('SELECT * FROM contacts ORDER BY id');
+$contacts = $con->query('SELECT * FROM Contacts ORDER BY id');
 while ($contact = $contacts->fetch()) {
   array_push($stackContacts, $contact['code']);
   array_push($stackContactCountrys, $contact['nationality']);
@@ -50,7 +50,7 @@ $contacts->closeCursor(); // Termine le traitement de la requête
 $stackHideouts = [];
 $stackHideoutCountrys = [];
 $stackHideoutIds = [];
-$hideouts = $con->query('SELECT * FROM hideouts ORDER BY id');
+$hideouts = $con->query('SELECT * FROM Hideouts ORDER BY id');
 while ($hideout = $hideouts->fetch()) {
   array_push($stackHideouts, $hideout['type']);
   array_push($stackHideoutCountrys, $hideout['country']);
@@ -96,7 +96,7 @@ if (isset($_POST['create'])) {
   if (!empty($_POST['agent'])) {
     $agentListeIds = $_POST['agent'];
     for ($i = 0; $i < count($agentListeIds); $i++) {
-      $stmt = $con->prepare("SELECT * FROM agents WHERE id=?");
+      $stmt = $con->prepare("SELECT * FROM Agents WHERE id=?");
       $stmt->execute([$agentListeIds[$i]]);
       $agent = $stmt->fetch();
       $transforme = explode(',', $agent['speciality']);
@@ -144,7 +144,7 @@ if (isset($_POST['create'])) {
 
   if (($_POST['specialitie_requ']) !== 'Spécialité requise...') {
     $specialitieRequ = $_POST['specialitie_requ'];
-    $stmt = $con->prepare("SELECT * FROM specialities WHERE id=?");
+    $stmt = $con->prepare("SELECT * FROM Specialities WHERE id=?");
     $stmt->execute([$specialitieRequ]);
     $specialitieRequ = $stmt->fetch();
     $item = $specialitieRequ['name'];
@@ -170,7 +170,7 @@ if (isset($_POST['create'])) {
   }
 
   // Vérifie si le nom d'utilisateur existe déjà
-  $stmt = $con->prepare("SELECT * FROM missions WHERE nom_de_code=?");
+  $stmt = $con->prepare("SELECT * FROM Missions WHERE nom_de_code=?");
   $stmt->execute([$nomDeCode]);
   $codeSearch = $stmt->fetch();
   if ($codeSearch) {
@@ -178,7 +178,7 @@ if (isset($_POST['create'])) {
     $_SESSION['message_type'] = "warning"; //définit le type de message (success, info, warning, danger)
   } else {
     // le nom d'utilisateur n'existe pas
-    $stmt = $con->prepare("INSERT INTO missions (titre, description, nom_de_code, country, type_mission, status, date_debut, date_fin,specialitie_id) VALUES (?, ?, ?, ?, ?, ?,?,?,?)");
+    $stmt = $con->prepare("INSERT INTO Missions (titre, description, nom_de_code, country, type_mission, status, date_debut, date_fin,specialitie_id) VALUES (?, ?, ?, ?, ?, ?,?,?,?)");
     $stmt->execute([$titre, $description, $nomDeCode, $pays, $typeDeMission, $status, $dateDebut, $dateFin, $specialitieRequ['id']]);
     $missionID = $con->lastInsertId();
     if ($stmt) {
@@ -186,21 +186,21 @@ if (isset($_POST['create'])) {
       $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
 
       for ($i = 0; $i < count($agentListeIds); $i++) {
-        $stmt = $con->prepare("INSERT INTO agents_has_missions (mission_id, agent_id) VALUES (?, ?)");
+        $stmt = $con->prepare("INSERT INTO Agents_has_Missions (mission_id, agent_id) VALUES (?, ?)");
         $stmt->execute([$missionID, $agentListeIds[$i]]);
       }
       if($hideoutListeIds != '') {
         for ($i = 0; $i < count($hideoutListeIds); $i++) {
-          $stmt = $con->prepare("INSERT INTO hideouts_has_missions (mission_id, hideouts_id) VALUES (?, ?)");
+          $stmt = $con->prepare("INSERT INTO Hideouts_has_Missions (mission_id, hideouts_id) VALUES (?, ?)");
           $stmt->execute([$missionID, $hideoutListeIds[$i]]);
         }
       }
       for ($i = 0; $i < count($contactListeIds); $i++) {
-        $stmt = $con->prepare("INSERT INTO contacts_has_missions (mission_id, contact_id) VALUES (?, ?)");
+        $stmt = $con->prepare("INSERT INTO Contacts_has_Missions (mission_id, contact_id) VALUES (?, ?)");
         $stmt->execute([$missionID, $contactListeIds[$i]]);
       }
       for ($i = 0; $i < count($targetListeIds); $i++) {
-        $stmt = $con->prepare("INSERT INTO cibles_has_missions (mission_id, cible_id) VALUES (?, ?)");
+        $stmt = $con->prepare("INSERT INTO Cibles_has_Missions (mission_id, cible_id) VALUES (?, ?)");
         $stmt->execute([$missionID, $targetListeIds[$i]]);
       }
 
