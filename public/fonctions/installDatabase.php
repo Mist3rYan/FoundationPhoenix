@@ -82,7 +82,7 @@ try {
         ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
     $dbco->exec($sql);
 
-    $sql ="SET FOREIGN_KEY_CHECKS=0";
+    $sql ="SET FOREIGN_KEY_CHECKS = 0";
     $dbco->exec($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `Agents_has_Missions` (
@@ -119,6 +119,9 @@ try {
         FOREIGN KEY (`hideouts_id`) REFERENCES `hideouts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (`mission_id`) REFERENCES `missions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci";
+    $dbco->exec($sql);
+    
+    $sql ="SET FOREIGN_KEY_CHECKS = 1";
     $dbco->exec($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `Users` (

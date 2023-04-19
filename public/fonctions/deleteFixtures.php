@@ -29,13 +29,11 @@ try {
     $con->exec($sql);
     $sql = "TRUNCATE TABLE `Missions`";
     $con->exec($sql);
-    $sql = "TRUNCATE TABLE `Specialties`";
-    $con->exec($sql);
     $sql = "TRUNCATE TABLE `Targets`";
     $con->exec($sql);
     $sql = "TRUNCATE TABLE `Users`";
     $con->exec($sql);
-    $sql = "TRUNCATE TABLE `Targets_has_Missions`";
+    $sql = "TRUNCATE TABLE `Cibles_has_Missions`";
     $con->exec($sql);
     $sql = "TRUNCATE TABLE `Hideouts_has_Missions`";
     $con->exec($sql);
@@ -43,6 +41,14 @@ try {
     $con->exec($sql);
     $sql = "TRUNCATE TABLE `Contacts_has_Missions`";
     $con->exec($sql);
+    $sql = 'SET FOREIGN_KEY_CHECKS = 0';
+    $con->exec($sql);
+    $sql = "TRUNCATE TABLE `Specialities`";
+    $con->exec($sql);
+    $sql = 'SET FOREIGN_KEY_CHECKS = 1';
+    $con->exec($sql);
+    $con = null;
+    
     session_destroy(); //détruit la session
     session_start(); //démarre la session
     $_SESSION['message'] = "Base de données bien supprimée"; //stocke le message dans une variable de session
