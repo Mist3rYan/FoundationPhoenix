@@ -135,8 +135,8 @@ try {
     $dbco->exec($sql);
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();
-    $_SESSION['message'] = "Erreur : " . $e->getMessage(); //stocke le message dans une variable de session
+    $_SESSION['message'] = "Erreur Installation BDD : " . $e->getMessage(); //stocke le message dans une variable de session
     $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
-    header('Location: ../index.php');
-    exit();
+    // header('Location: ../index.php');
+    // exit();
 }

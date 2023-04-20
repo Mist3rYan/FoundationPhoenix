@@ -1,24 +1,15 @@
 <?php
 session_start(); //démarre la session
-define('DBHOST', 'sql202.epizy.com');
-define('DBUSER', 'epiz_34039178');
-define('DBNAME', 'epiz_34039178_foundation_phoenix');
-define('PORT', '3306');
-define('PASSWORD', 'jA2qLkGuWhEFx');
 
-$servername = DBHOST;
-$username = DBUSER;
-$password = PASSWORD;
-$dbname = DBNAME;
-$port = PORT;
+$servername = 'sql202.epizy.com';
+$username = 'epiz_34039178';
+$password = 'jA2qLkGuWhEFx';
+$dbname = 'epiz_34039178_foundation_phoenix';
+$port = '3306';
 
-$dsn = new PDO("mysql:host=$servername;port=$port", $username, $password);
 try {
-    // $dsn = "mysql:host=" . DBHOST .':'.DBPORT. ";dbname=" . DBNAME;
     // ON SE CONNECTE A LA BDD
     $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // ON DEFINIT LE CHARSET EN UTF8
-    $con->exec("SET NAMES utf8");
     // ON DEFINIT LA METHODE DE RECUPERATION DES DONNEES
     $con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $sql = "TRUNCATE TABLE `Agents`";

@@ -180,6 +180,9 @@ if (isset($_POST['update'])) {
         $_SESSION['message'] = " Mission mise à jour avec succès !"; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
 
+        $sql = "SET FOREIGN_KEY_CHECKS = 0";
+        $con->exec($sql);
+
         $sql = "DELETE FROM Agents_has_Missions WHERE `mission_id` = :id";
         //Préparez notre déclaration DELETE
         $stmt = $con->prepare($sql);
@@ -253,6 +256,8 @@ if (isset($_POST['update'])) {
             $stmt = $con->prepare("INSERT INTO Cibles_has_Missions (mission_id, cible_id) VALUES (?, ?)");
             $stmt->execute([$idMission, $target['id']]);
         }
+        $sql = "SET FOREIGN_KEY_CHECKS = 1";
+        $con->exec($sql);
 
 /*         header('Location: pageMissions.php');
         exit(); */

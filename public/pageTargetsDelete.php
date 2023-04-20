@@ -88,7 +88,7 @@ require_once('fonctions/connect.php');
                                 <p>Confirmez vous la suppression ?</p>
                             </div>
                             <div class='modal-footer'>
-                                <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $target['id'] ?>&table=targets"> Oui </a>
+                                <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $target['id'] ?>&table=Targets"> Oui </a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
 

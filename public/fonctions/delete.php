@@ -16,9 +16,21 @@ $stmt->bindValue(':id', $id);
 $res = $stmt->execute();
 
 
-if ($table == 'missions') {
-
+if ($table == 'Missions') {
     if ($res) {
+        $query = "DELETE FROM Cibles_has_Missions WHERE mission_id = :id";
+        $statement = $con->prepare($query);
+        $statement->execute(array('id' => $id));
+        $query = "DELETE FROM Hideouts_has_Missions WHERE mission_id = :id";
+        $statement = $con->prepare($query);
+        $statement->execute(array('id' => $id));
+        $query = "DELETE FROM Agents_has_Missions WHERE mission_id = :id";
+        $statement = $con->prepare($query);
+        $statement->execute(array('id' => $id));
+        $query = "DELETE FROM Contacts_has_Missions WHERE mission_id = :id";
+        $statement = $con->prepare($query);
+        $statement->execute(array('id' => $id));
+
         $_SESSION['message'] = "Suppression effectuée avec succès !";
         $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, error)
         header('Location: ../pageMissionsDelete.php');
@@ -31,10 +43,13 @@ if ($table == 'missions') {
     }
 }
 
-if ($table == 'agents') {
-    $query = "SELECT * FROM Agents_has_Missions WHERE mission_id = :id";
+if ($table == 'Agents') {
+    $query = "SELECT * FROM Agents_has_Missions WHERE agent_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
+    $query = "DELETE FROM Agents_has_Missions WHERE agent_id = :id";
+    $stmt = $con->prepare($query);
+    $stmt->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
         $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
@@ -45,6 +60,18 @@ if ($table == 'agents') {
         $stmt->bindValue(':id', $id);
         //Exécuter notre instruction DELETE
         $res = $stmt->execute();
+        $query = "DELETE FROM Agents_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Cibles_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Hideouts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Contacts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
     }
     if ($res) {
         $_SESSION['message'] = "Suppression effectuée avec succès !";
@@ -58,7 +85,7 @@ if ($table == 'agents') {
         exit();
     }
 }
-if ($table == 'specialities') {
+if ($table == 'Specialities') {
     if ($res) {
         $_SESSION['message'] = "Suppression effectuée avec succès !";
         $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, error)
@@ -71,7 +98,7 @@ if ($table == 'specialities') {
         exit();
     }
 }
-if ($table == 'hideouts') {
+if ($table == 'Hideouts') {
     if ($res) {
         $_SESSION['message'] = "Suppression effectuée avec succès !";
         $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, error)
@@ -84,10 +111,13 @@ if ($table == 'hideouts') {
         exit();
     }
 }
-if ($table == 'targets') {
-    $query = "SELECT * FROM Targets_has_Missions WHERE mission_id = :id";
+if ($table == 'Targets') {
+    $query = "SELECT * FROM Cibles_has_Missions WHERE cible_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
+    $query = "DELETE FROM Cibles_has_Missions WHERE cible_id = :id";
+    $stmt = $con->prepare($query);
+    $stmt->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
         $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
@@ -98,6 +128,18 @@ if ($table == 'targets') {
         $stmt->bindValue(':id', $id);
         //Exécuter notre instruction DELETE
         $res = $stmt->execute();
+        $query = "DELETE FROM Cibles_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Hideouts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Agents_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Contacts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
     }
     if ($res) {
         $_SESSION['message'] = "Suppression effectuée avec succès !";
@@ -111,10 +153,13 @@ if ($table == 'targets') {
         exit();
     }
 }
-if ($table == 'contacts') {
-    $query = "SELECT * FROM Contacts_has_Missions WHERE mission_id = :id";
+if ($table == 'Contacts') {
+    $query = "SELECT * FROM Contacts_has_Missions WHERE contact_id = :id";
     $statement = $con->prepare($query);
     $statement->execute(array('id' => $id));
+    $query = "DELETE FROM Contacts_has_Missions WHERE contact_id = :id";
+    $stmt = $con->prepare($query);
+    $stmt->execute(array('id' => $id));
     while ($suppressionMission = $statement->fetch(PDO::FETCH_ASSOC)) {
         $sql = "DELETE FROM Missions WHERE `id` = :id";
         //Préparez notre déclaration DELETE
@@ -125,6 +170,18 @@ if ($table == 'contacts') {
         $stmt->bindValue(':id', $id);
         //Exécuter notre instruction DELETE
         $res = $stmt->execute();
+        $query = "DELETE FROM Contacts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Cibles_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Hideouts_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
+        $query = "DELETE FROM Agents_has_Missions WHERE mission_id = :id";
+        $stmt = $con->prepare($query);
+        $stmt->execute(array('id' => $id));
     }
     if ($res) {
         $_SESSION['message'] = "Suppression effectuée avec succès !";

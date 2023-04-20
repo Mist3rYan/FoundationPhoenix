@@ -185,6 +185,9 @@ if (isset($_POST['create'])) {
       $_SESSION['message'] = " Mission créée avec succès !"; //stocke le message dans une variable de session
       $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)
 
+      $stmt ="SET FOREIGN_KEY_CHECKS = 0";
+      $con->exec($stmt);
+
       for ($i = 0; $i < count($agentListeIds); $i++) {
         $stmt = $con->prepare("INSERT INTO Agents_has_Missions (mission_id, agent_id) VALUES (?, ?)");
         $stmt->execute([$missionID, $agentListeIds[$i]]);
@@ -204,6 +207,9 @@ if (isset($_POST['create'])) {
         $stmt->execute([$missionID, $targetListeIds[$i]]);
       }
 
+      $stmt ="SET FOREIGN_KEY_CHECKS = 1";
+      $con->exec($stmt);
+      
       header('Location: pageMissions.php');
       exit();
     } else {

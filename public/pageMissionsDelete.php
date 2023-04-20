@@ -94,7 +94,7 @@ $specialities->closeCursor(); // Termine le traitement de la requête
                                     <p>Confirmez vous la suppression ?</p>
                                 </div>
                                 <div class='modal-footer'>
-                                    <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $mission['id'] ?>&table=missions"> Oui </a>
+                                    <a type="button" class='btn btn-danger' href="fonctions/delete.php?id=<?= $mission['id'] ?>&table=Missions"> Oui </a>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
