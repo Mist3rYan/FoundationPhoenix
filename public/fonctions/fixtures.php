@@ -1,27 +1,11 @@
 <?php
 session_start(); //démarre la session
+require_once('connect.php');
 require_once('../../vendor/autoload.php'); //charge les dépendances
 require_once('../Models/Agent.php'); //charge les fonctions liées aux agents
 require_once('../Models/Speciality.php'); //charge les fonctions liées aux spécialités
 require_once('../Models/Hideout.php'); //charge les fonctions liées aux planques
 
-define('DBHOST', 'sql202.epizy.com');
-define('DBUSER', 'epiz_34039178');
-define('DBNAME', 'epiz_34039178_foundation_phoenix');
-define('PORT', '3306');
-define('PASSWORD', 'jA2qLkGuWhEFx');
-
-$servername = DBHOST;
-$username = DBUSER;
-$password = PASSWORD;
-$dbname = DBNAME;
-$port = PORT;
-
-// ON DEFINIT LE DSN
-
-$dbco = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-$dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$dbco->exec("SET CHARACTER SET utf8");
 // On crée une instance de Faker en FR
 $faker = Faker\Factory::create('fr_FR');
 
@@ -69,7 +53,7 @@ $country = array(
     'Equateur'
 );
 $sql = "SELECT id FROM Users WHERE id = 1 ";
-$sth = $dbco->prepare($sql);
+$sth = $con->prepare($sql);
 $sth->execute();
 $result = $sth->fetch(PDO::FETCH_ASSOC);
 if ($result['id'] != 1) {
@@ -84,7 +68,7 @@ values
     'admin',
     Now()
 )";
-    $dbco->exec($sql);
+    $con->exec($sql);
 
     //Specialities
     $speciality = new Speciality();
@@ -95,7 +79,7 @@ values
     Specialities (name) 
     values ('" . $speciality->getName() . "'
     )";
-        $dbco->exec($sql);;
+        $con->exec($sql);;
     }
     //Agents
     $agent = new Agent();
@@ -115,7 +99,7 @@ VALUES (
     '" . date($agent->getBirthdate()) . "',
     '" . json_encode($agent->getSpeciality()) . "'
 )";
-    $dbco->exec($sql);
+    $con->exec($sql);
 
 
     $nbAgents = 20;
@@ -151,7 +135,7 @@ VALUES (
         '" . date($agent->getBirthdate()) . "',
         '" . json_encode($agent->getSpeciality()) . "'
     )";
-        $dbco->exec($sql);
+        $con->exec($sql);
     }
 
     //Contacts
@@ -170,7 +154,7 @@ VALUES (
     '" . $contact->getNationality() . "',
     '" . $contact->getBirthdate() . "'
     )";
-    $dbco->exec($sql);
+    $con->exec($sql);
 
     $nbContact = 20;
     for ($i = 0; $i < $nbContact; $i++) {
@@ -195,7 +179,7 @@ VALUES (
         '" . $contact->getNationality() . "',
         '" . $contact->getBirthdate() . "'
         )";
-        $dbco->exec($sql);
+        $con->exec($sql);
     }
 
     //Targets
@@ -215,7 +199,7 @@ VALUES (
     '" . $target->getNationality() . "',
     '" . $target->getBirthdate() . "'
     )";
-    $dbco->exec($sql);
+    $con->exec($sql);
 
     $nbTarget = 20;
     for ($i = 0; $i < $nbTarget; $i++) {
@@ -239,7 +223,7 @@ VALUES (
         '" . $target->getNationality() . "',
         '" . $target->getBirthdate() . "'
         )";
-        $dbco->exec($sql);
+        $con->exec($sql);
     }
 
     //Hideouts
@@ -261,7 +245,7 @@ VALUES (
         '" . $hideout->getCountry() . "',
         '" . $hideout->getType() . "'
         )";
-        $dbco->exec($sql);
+        $con->exec($sql);
     }
 
     $sql = " INSERT INTO
@@ -278,22 +262,22 @@ VALUES (
             Now(),
             1
         )";
-    $dbco->exec($sql);
+    $con->exec($sql);
 
     $sql = "SET FOREIGN_KEY_CHECKS = 0";
-    $dbco->exec($sql);
+    $con->exec($sql);
     $sql = "INSERT INTO Agents_has_Missions (mission_id, agent_id)
  VALUES ('1', '1')";
-    $dbco->exec($sql);
+    $con->exec($sql);
     $sql = "INSERT INTO Contacts_has_Missions (mission_id, contact_id) 
  VALUES ('1', '1')";
-    $dbco->exec($sql);
+    $con->exec($sql);
     $sql = "INSERT INTO Cibles_has_Missions (mission_id, cible_id) 
  VALUES ('1', '1')";
-    $dbco->exec($sql);
+    $con->exec($sql);
     $sql = "SET FOREIGN_KEY_CHECKS = 1";
-    $dbco->exec($sql);
-    $dbco = null;
+    $con->exec($sql);
+    $con = null;
 
     $_SESSION['message'] = "Les données ont bien été ajoutées !"; //stocke le message dans une variable de session
     $_SESSION['message_type'] = "success"; //définit le type de message (success, info, warning, danger)

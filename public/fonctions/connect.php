@@ -13,7 +13,7 @@ $port = PORT;;
 
 // ON DEFINIT LE DSN
 $dsn = new PDO("mysql:host=$servername;port=$port", $username, $password);
-// $dsn = "mysql:host=" . DBHOST .':'.DBPORT. ";dbname=" . DBNAME;
+// $dsn = "mysql:host=" . DBHOST .':'.DBPORT. ";dbname=" . DBNAME;;
 try {
     // ON SE CONNECTE A LA BDD
     $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

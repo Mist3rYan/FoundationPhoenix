@@ -1,17 +1,8 @@
 <?php
 session_start(); //démarre la session
-
-$servername = 'sql202.epizy.com';
-$username = 'epiz_34039178';
-$password = 'jA2qLkGuWhEFx';
-$dbname = 'epiz_34039178_foundation_phoenix';
-$port = '3306';
+require_once('connect.php');
 
 try {
-    // ON SE CONNECTE A LA BDD
-    $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // ON DEFINIT LA METHODE DE RECUPERATION DES DONNEES
-    $con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $sql = "TRUNCATE TABLE `Agents`";
     $con->exec($sql);
     $sql = "TRUNCATE TABLE `Contacts`";
