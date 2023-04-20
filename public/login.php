@@ -20,7 +20,7 @@ if (isset($_POST['email']) &&  isset($_POST['password'])) {
         header('Location: index.php');
         exit(); 
     } else {
-        $_SESSION['message'] = "Les informations sont incorrectes !"; //stocke le message dans une variable de session
+        $_SESSION['message'] = "Les informations sont incorrectes ! Avez vous ajouté les fixtures ?"; //stocke le message dans une variable de session
         $_SESSION['message_type'] = "error"; //définit le type de message (success, info, warning, danger)
         header('Location: index.php');
         exit(); 
